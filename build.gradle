@@ -5,9 +5,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 project.version = openEspVersion
-println "OpenESP version " + openEspVersion + " with tomcat " + tomcatVersion + ", Solr " + solrVersion
-println "TEMP dir: " + tmpDir
-
 apply plugin: 'java'
 project.ext.basename = "openesp"
 
@@ -18,6 +15,9 @@ def tomcatName = "apache-tomcat-${tomcatVersion}"
 def architecture = "-windows-x64"
 def tomcatUrl = "http://apache.uib.no/tomcat/tomcat-7/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
 def tomcatDir = "${deployDir}/tomcat"
+
+println "OpenESP version " + openEspVersion + " with tomcat " + tomcatVersion + ", Solr " + solrVersion
+println "TEMP dir: " + tmpDir
 
 defaultTasks 'dist' 
 
