@@ -32,7 +32,6 @@ task cleanTemp {
 task init {
     outputs.file 'build/openesp/version.properties'
     doLast {
-      mkdir tmpDir
       mkdir deployDir
       copy {
         from 'initial'
@@ -66,7 +65,7 @@ task deployTomcat (dependsOn: 'getTomcat') {
   def tomcatZipFile = "${tmpDir}/${tomcatName}.zip"
   def tomcatFromDir = "${deployDir}/${tomcatName}"
   def tomcatToDir = "${tomcatDir}"
-  outputs.dir "${tomcatToDir}/bin"
+  outputs.file "${tomcatToDir}/LICENSE"
   doLast {
     println "Unpacking Tomcat into ${deployDir}"
     copy {
