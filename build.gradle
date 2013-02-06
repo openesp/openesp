@@ -65,7 +65,7 @@ task deployTomcat (dependsOn: 'getTomcat') {
   def tomcatZipFile = "${tmpDir}/${tomcatName}.zip"
   def tomcatFromDir = "${deployDir}/${tomcatName}"
   def tomcatToDir = "${tomcatDir}"
-  outputs.file "${tomcatToDir}/LICENSE"
+  outputs.file "${tomcatDir}/LICENSE"
   doLast {
     println "Unpacking Tomcat into ${deployDir}"
     copy {
@@ -88,7 +88,7 @@ task deploySolr (dependsOn: [':openesp-solr:organizeForOpenESP', 'init']) {
 }
 
 task deployServiceWrapper (dependsOn: ['deployTomcat']) {
-  outputs.file "${deployDir}/bin/openesp.sh"
+  outputs.file "${deployDir}/bin/OpenESPw.exe"
   doLast {
     println "Copying service wrappers into bin folder"
     copy {
