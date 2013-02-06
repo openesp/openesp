@@ -9,7 +9,7 @@ apply plugin: 'java'
 project.ext.basename = "openesp"
 
 project.ext.set("tmpDir", System.getProperty("java.io.tmpdir"))
-def deployDir = 'build/openesp'
+def deployDir = "build/openesp"
 def openEspZipName = "openesp-${openEspVersion}.zip"
 def tomcatName = "apache-tomcat-${tomcatVersion}"
 def architecture = "-windows-x64"
@@ -62,21 +62,22 @@ task getTomcat (dependsOn: 'init'){
 }
 
 task deployTomcat (dependsOn: 'getTomcat') {
-  def tomcatZipFile = "${tmpDir}/${tomcatName}.zip"
+  outputs.file "${tomcatDir}/LICENSE"
+  def tomcatZipFile = "${tmpDir}${tomcatName}.zip"
   def tomcatFromDir = "${deployDir}/${tomcatName}"
   def tomcatToDir = "${tomcatDir}"
-  outputs.file "${tomcatDir}/LICENSE"
   doLast {
-    println "Unpacking Tomcat into ${deployDir}"
+    println "Unpacking Tomcat from ${tomcatZipFile} into ${deployDir}"
     copy {
       from zipTree(tomcatZipFile)
       into "${deployDir}"
     }
+    println "Renaming ${tomcatFromDir} to ${tomcatToDir}"
     new File(tomcatFromDir).renameTo(new File(tomcatToDir))    
   }
 }
 
-task deploySolr (dependsOn: [':openesp-solr:organizeForOpenESP', 'init']) {
+task deploySolr (dependsOn: [':openesp-solr:organizeForOpenESP', 'deployTomcat']) {
   outputs.file "${deployDir}/bin/post.jar"
   doLast {
     println "Deploying Solr into ${deployDir}"
@@ -88,9 +89,9 @@ task deploySolr (dependsOn: [':openesp-solr:organizeForOpenESP', 'init']) {
 }
 
 task deployServiceWrapper (dependsOn: ['deployTomcat']) {
-  outputs.file "${deployDir}/bin/OpenESPw.exe"
+  //outputs.file "${deployDir}/bin/OpenESPw.exe"
   doLast {
-    println "Copying service wrappers into bin folder"
+    println "Copying service wrappers from ${tomcatDir}/bin into bin folder"
     copy {
       from "${tomcatDir}/bin"
       include '**/*.exe'
