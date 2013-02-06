@@ -1,0 +1,52 @@
+#..................................
+[ ca ]
+default_ca = CA_default
+[ CA_default ]
+dir = .
+serial = $dir/serial
+database = $dir/index.txt
+new_certs_dir = $dir
+certificate = $dir/ca.pem
+private_key = $dir/ca.key.pem
+default_days = 3650
+default_md = md5
+preserve = no
+email_in_dn = no
+nameopt = default_ca
+certopt = default_ca
+policy = policy_match
+[ policy_match ]
+countryName = match
+#stateOrProvinceName = match
+organizationName = match
+organizationalUnitName = optional
+commonName = supplied
+emailAddress = optional
+[ req ]
+default_bits = 2048
+default_keyfile = key.pem # name of generated keys
+default_md = md5 # message digest algorithm
+string_mask = nombstr # permitted characters
+distinguished_name = req_distinguished_name
+prompt = no
+req_extensions = v3_req
+[ req_distinguished_name ]
+C = NO
+L = Lysaker
+O = OpenESP
+CN = OpenESP
+#0.organizationName_default = OpenESP
+#localityName_default = Lysaker
+#stateOrProvinceName_default = Oslo
+#countryName_default = NO
+#CN_default = OpenESP
+#C_default = NO
+#emailAddress_default = openesp@cominvent.com
+#O_default = OpenESP
+[ v3_ca ]
+basicConstraints = CA:TRUE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+[ v3_req ]
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash

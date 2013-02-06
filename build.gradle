@@ -1,0 +1,107 @@
+//
+// OpenESP build definition
+// Simply run 'gradle' to build it all
+//
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'java'
+project.ext.basename = "openesp"
+
+def tmpDir = 'tmp'
+def deployDir = 'build/openesp'
+def openEspZipName = 'openesp-${openEspVersion}.zip'
+
+def tomcatName = "apache-tomcat-${tomcatVersion}"
+def architecture = "-windows-x64"
+def tomcatUrl = "http://apache.uib.no/tomcat/tomcat-7/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
+def tomcatDir = "${deployDir}/tomcat"
+
+defaultTasks 'dist' 
+
+task cleanAll (dependsOn: ':openesp-solr:clean') { 
+  doLast {
+    println "Cleaning"
+    delete tmpDir
+    delete 'build'
+  }
+}
+
+task init {
+    outputs.dir 'build'
+    doLast {
+      mkdir tmpDir
+      mkdir deployDir
+      copy {
+        from 'initial'
+        into "${deployDir}"
+      }
+    }
+}
+
+task getTomcat (dependsOn: 'init'){
+  def tomcatZipFile = "${tmpDir}/${tomcatName}.zip"
+  def tomcatFromDir = "${deployDir}/${tomcatName}"
+  def tomcatToDir = "${tomcatDir}"
+  outputs.file tomcatZipFile
+  doLast {
+    println "Downloading Tomcat to ${tmpDir}"
+    ant {
+      get src:tomcatUrl,
+      dest:tomcatZipFile, verbose:"false"
+    }
+  }
+}
+
+task deployTomcat (dependsOn: 'getTomcat') {
+  def tomcatZipFile = "${tmpDir}/${tomcatName}.zip"
+  def tomcatFromDir = "${deployDir}/${tomcatName}"
+  def tomcatToDir = "${tomcatDir}"
+  outputs.dir "${tomcatToDir}/bin"
+  doLast {
+    println "Unpacking Tomcat into ${deployDir}"
+    copy {
+      from zipTree(tomcatZipFile)
+      into "${deployDir}"
+    }
+    new File(tomcatFromDir).renameTo(new File(tomcatToDir))    
+  }
+}
+
+task deployServiceWrapper (dependsOn: ['deployTomcat']) {
+  outputs.file "${deployDir}/bin/openesp.sh"
+  doLast {
+    println "Copying service wrappers into bin folder"
+    copy {
+      from "${tomcatDir}/bin"
+      include '**/*.exe'
+      rename 'tomcat7(.*)', 'OpenESP$1'
+      into "${deployDir}/bin"
+    }
+  }
+}
+
+task deployOverlay (dependsOn: [':openesp-solr:deploySolr', 'deployTomcat']) {
+  outputs.file "${deployDir}/conf/logging.properties"
+  doLast {
+    println "Deploying overlay to ${deployDir}"
+    copy {
+      from 'overlay'
+      into "${deployDir}"
+    }
+  }
+}
+
+
+task doZip (type: Zip, dependsOn: ['deployServiceWrapper', 'deployOverlay']) {
+  outputs.file "${doZip.archiveName}"
+  from "${deployDir}"
+  doLast {
+    println "Packaging into ZIP ${doZip.archiveName}"
+  }
+}
+
+task dist (dependsOn: 'doZip') {
+  doLast {
+    println "DONE"
+  }
+}

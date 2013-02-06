@@ -8,3 +8,6 @@ openesp-mcf
 build
 openesp-solr/.project
 openesp-installer
+*.odt#
+
+documentation/OpenESP admin guide.pdf

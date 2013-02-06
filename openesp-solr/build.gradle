@@ -1,0 +1,94 @@
+// Build file for Solr as part of OpenESP
+def fullName = "solr-${solrVersion}"
+def binUrl = "http://apache.uib.no/lucene/solr/$solrVersion/${fullName}.zip"
+def sourceDir = 'build'
+def warName = "${fullName}.war"
+def zipName = "${fullName}.zip"
+def zipPath = "${sourceDir}/${zipName}"
+def zipDirPath = "${sourceDir}/${fullName}"
+def warPath = "${zipDirPath}/dist/${warName}"
+def deployDir = '../build/openesp'
+
+defaultTasks 'deploySolr' 
+
+task clean {
+	doLast {
+		delete sourceDir
+	} 
+}
+
+task init {
+	outputs.dir sourceDir
+	doLast {
+		mkdir sourceDir
+	}
+}
+
+task getSolr (dependsOn: 'init') {
+	outputs.file "${zipPath}"
+	doLast {
+		ant {
+			get src:binUrl,
+			dest:sourceDir, verbose:"false"
+		}
+	}
+}
+
+task unpackSolr (dependsOn: 'getSolr') {
+	outputs.dir "${zipDirPath}"
+	doLast {
+		copy {
+			from zipTree(zipPath)
+			into "${sourceDir}"
+		}
+	}
+}
+
+task deploySolr (dependsOn: 'unpackSolr') {
+	outputs.file "${deployDir}/tomcat/conf/Catalina/localhost/solr.xml"
+	doLast {
+		copy {
+			from warPath
+			into "${deployDir}/webapps"
+			rename warName, 'solr.war'
+		}
+		copy {
+			from 'solr-tomcat-context.xml'
+			into "${deployDir}/tomcat/conf/Catalina/localhost"
+			rename 'solr-tomcat-context.xml', "solr.xml"
+		}
+		copy {
+			from "${zipDirPath}/example/solr"
+			into "${deployDir}/conf/solr"
+		}
+		copy {
+			from ("${zipDirPath}/dist") {
+			  include 'solr-langid-*'
+			  include 'solr-velocity-*'
+			  include 'solr-dataimport*'
+			  include 'solr-cell-*'
+			}
+			into "${deployDir}/lib/solr"
+		}
+		copy {
+			from "${zipDirPath}/contrib/langid/lib"
+			into "${deployDir}/lib/solr"
+		}
+		copy {
+			from "${zipDirPath}/contrib/velocity/lib"
+			into "${deployDir}/lib/solr"
+		}
+		copy {
+			from "${zipDirPath}/contrib/dataimporthandler/lib"
+			into "${deployDir}/lib/solr"
+		}
+		copy {
+			from "${zipDirPath}/contrib/extraction/lib"
+			into "${deployDir}/lib/solr"
+		}
+		copy {
+			from "${zipDirPath}/example/exampledocs/post.jar"
+			into "${deployDir}/bin"
+		}
+	}
+}
