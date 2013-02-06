@@ -21,16 +21,19 @@ Welcome as a user and as a contributor!
 Building
 ========
 The project uses Gradle as build system, and to build the distro, simply run:
-  gradle
+
+    gradle
+
 You'll then get the distro in build/distributions/openesp-x.y.zip
 
 Structure
 =========
-initial : this is the initial folder structure which will be included in distro
-overlay : everything in this folder will be overlaid AFTER assembling Solr, Tomcat etc
-documentation : for developing user documentation. PDF should be placed in initial/doc
-openesp-solr : Sub project for building (or downloading) Apache Solr
-openesp-mcf : Sub project for building (or downloading) Apache MCF (not yet active)
-build.gradle : The makefile for gradle
-gradle.properties : Specify global properties here, such as versions for Solr, Tomcat etc
-build : After running gradle, the release artifacts are generated here
+
+* initial: this is the initial folder structure which will be included in distro
+* overlay: everything in this folder will be overlaid AFTER assembling Solr, Tomcat etc
+* documentation: for developing user documentation. PDF should be placed in initial/doc
+* openesp-solr: Sub project for building (or downloading) Apache Solr
+* openesp-mcf: Sub project for building (or downloading) Apache MCF (not yet active)
+* build.gradle: The makefile for gradle
+* gradle.properties: Specify global properties here, such as versions for Solr, Tomcat etc
+* build: After running gradle, the release artifacts are generated here
