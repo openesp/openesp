@@ -1,8 +1,8 @@
 Open Enterprise Search Platform (OpenESP)
 =========================================
 Welcome to OpenESP, the Open Source Enterprise Search Platform.
-The project aims to develop an Apache 2.0 licensed distro of Apache Solr.
-With distro, we mean Solr as the core plus other components which are
+The project develops an Apache 2.0 licensed distro of Apache Solr.
+With "distro", we mean Solr as the core plus other components which are
 frequently needed in an enterprise search setting.
 
 We believe the next logical step in the Lucene/Solr "revolution" is to
@@ -13,24 +13,13 @@ ECMs and other repositories within minutes after downloading OpenESP.
 The project is initiated and sponsored by Cominvent AS (www.cominvent.com)
 and lives on www.openesp.org and here on GitHub.
 
-We adopt the Apache Software Foundation project develpment methodology:
- * The product is Apache 2.0 licensed
- * A PMC will be established (http://www.apache.org/dev/pmc.html)
- * The PMC nominates committers (http://www.apache.org/dev/committers.html)
- * Contributors grant all © to the project
- * All users are invited to contribute in an open, transparent way
- * Bug fixes and features are accepted through GitHub mechanisms
+We adopt the Apache Software Foundation project develpment methodology,
+doing all development in the open.
 
-In the initial phase the project will focus on:
- * Establishing a repository structure and build system
- * Adding a Tomcat instance with decent defaults
- * Adding Solr with initial config
- * Adding a node start/stop mechanism
+Building
+========
+The project uses Gradle as build system, and to build the distro, simply run:
+  gradle
+You'll then get the distro in build/distributions/openesp-x.y.zip
 
-In later phases we'll look at
- * Crawler integration
- * Manifold Connector Framework integration
- * Admin GUI
- * More
-
-Oslo, November 2010
+Welcome as a user and as a contributor!
