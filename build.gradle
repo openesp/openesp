@@ -5,16 +5,14 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 project.version = openEspVersion
-
-println "Building OpenESP version " + openEspVersion + " with tomcat " + tomcatVersion + ", Solr " + solrVersion
+println "OpenESP version " + openEspVersion + " with tomcat " + tomcatVersion + ", Solr " + solrVersion
 
 apply plugin: 'java'
 project.ext.basename = "openesp"
 
-def tmpDir = 'tmp'
+project.ext.set("tmpDir", System.getProperty("java.io.tmpdir"))
 def deployDir = 'build/openesp'
 def openEspZipName = "openesp-${openEspVersion}.zip"
-
 def tomcatName = "apache-tomcat-${tomcatVersion}"
 def architecture = "-windows-x64"
 def tomcatUrl = "http://apache.uib.no/tomcat/tomcat-7/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
@@ -25,19 +23,25 @@ defaultTasks 'dist'
 task cleanAll (dependsOn: ':openesp-solr:clean') { 
   doLast {
     println "Cleaning"
-    delete tmpDir
     delete 'build'
   }
 }
 
 task init {
-    outputs.dir 'build'
+    outputs.file 'build/openesp/version.properties'
     doLast {
       mkdir tmpDir
       mkdir deployDir
       copy {
         from 'initial'
         into "${deployDir}"
+      }
+      println "Creating versions file"
+      def fields = ["openesp.version":openEspVersion, "solr.version":solrVersion, "tomcat.version":tomcatVersion]
+      new File("${deployDir}/version.properties").withWriter { out ->
+          fields.each() { key, value ->
+              out.writeLine("${key} = ${value}")
+          }
       }
     }
 }
@@ -71,6 +75,17 @@ task deployTomcat (dependsOn: 'getTomcat') {
   }
 }
 
+task deploySolr (dependsOn: [':openesp-solr:organizeForOpenESP', 'init']) {
+  outputs.file "${deployDir}/bin/post.jar"
+  doLast {
+    println "Deploying Solr into ${deployDir}"
+    copy {
+      from "openesp-solr/build/openesp"
+      into "${deployDir}"
+    }
+  }
+}
+
 task deployServiceWrapper (dependsOn: ['deployTomcat']) {
   outputs.file "${deployDir}/bin/openesp.sh"
   doLast {
@@ -84,7 +99,7 @@ task deployServiceWrapper (dependsOn: ['deployTomcat']) {
   }
 }
 
-task deployOverlay (dependsOn: [':openesp-solr:deploySolr', 'deployTomcat']) {
+task deployOverlay (dependsOn: ['deploySolr', 'deployTomcat']) {
   outputs.file "${deployDir}/conf/logging.properties"
   doLast {
     println "Deploying overlay to ${deployDir}"

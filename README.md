@@ -48,3 +48,7 @@ Structure
 * build.gradle: The makefile for gradle
 * gradle.properties: Specify global properties here, such as versions for Solr, Tomcat etc
 * build: After running gradle, the release artifacts are generated here
+
+Roadmap
+=======
+Please check the [issue tracker](https://github.com/openesp/openesp/issues) for bugs and future plans

@@ -1,50 +1,52 @@
 // Build file for Solr as part of OpenESP
 def fullName = "solr-${solrVersion}"
 def binUrl = "http://apache.uib.no/lucene/solr/$solrVersion/${fullName}.zip"
-def sourceDir = 'build'
+def buildDir = 'build'
 def warName = "${fullName}.war"
 def zipName = "${fullName}.zip"
-def zipPath = "${sourceDir}/${zipName}"
-def zipDirPath = "${sourceDir}/${fullName}"
-def warPath = "${zipDirPath}/dist/${warName}"
-def deployDir = '../build/openesp'
+def zipPath = "${tmpDir}/${zipName}"
+def unzippedPath = "${buildDir}/${fullName}"
+def warPath = "${unzippedPath}/dist/${warName}"
+def deployDir = "${buildDir}/openesp"
 
-defaultTasks 'deploySolr' 
+defaultTasks 'organizeForOpenESP' 
 
 task clean {
 	doLast {
-		delete sourceDir
+		delete buildDir
 	} 
 }
 
 task init {
-	outputs.dir sourceDir
+	outputs.dir buildDir
 	doLast {
-		mkdir sourceDir
+		mkdir buildDir
 	}
 }
 
 task getSolr (dependsOn: 'init') {
 	outputs.file "${zipPath}"
 	doLast {
+    println "Downloading Solr ${solrVersion} into ${tmpDir}"
 		ant {
 			get src:binUrl,
-			dest:sourceDir, verbose:"false"
+			dest:tmpDir, verbose:"false"
 		}
 	}
 }
 
 task unpackSolr (dependsOn: 'getSolr') {
-	outputs.dir "${zipDirPath}"
+	outputs.dir "${unzippedPath}"
 	doLast {
+    println "Unpacking Solr into ${buildDir}"
 		copy {
 			from zipTree(zipPath)
-			into "${sourceDir}"
+			into "${buildDir}"
 		}
 	}
 }
 
-task deploySolr (dependsOn: 'unpackSolr') {
+task organizeForOpenESP (dependsOn: 'unpackSolr') {
 	outputs.file "${deployDir}/tomcat/conf/Catalina/localhost/solr.xml"
 	doLast {
 		copy {
@@ -58,11 +60,11 @@ task deploySolr (dependsOn: 'unpackSolr') {
 			rename 'solr-tomcat-context.xml', "solr.xml"
 		}
 		copy {
-			from "${zipDirPath}/example/solr"
+			from "${unzippedPath}/example/solr"
 			into "${deployDir}/conf/solr"
 		}
 		copy {
-			from ("${zipDirPath}/dist") {
+			from ("${unzippedPath}/dist") {
 			  include 'solr-langid-*'
 			  include 'solr-velocity-*'
 			  include 'solr-dataimport*'
@@ -71,23 +73,23 @@ task deploySolr (dependsOn: 'unpackSolr') {
 			into "${deployDir}/lib/solr"
 		}
 		copy {
-			from "${zipDirPath}/contrib/langid/lib"
+			from "${unzippedPath}/contrib/langid/lib"
 			into "${deployDir}/lib/solr"
 		}
 		copy {
-			from "${zipDirPath}/contrib/velocity/lib"
+			from "${unzippedPath}/contrib/velocity/lib"
 			into "${deployDir}/lib/solr"
 		}
 		copy {
-			from "${zipDirPath}/contrib/dataimporthandler/lib"
+			from "${unzippedPath}/contrib/dataimporthandler/lib"
 			into "${deployDir}/lib/solr"
 		}
 		copy {
-			from "${zipDirPath}/contrib/extraction/lib"
+			from "${unzippedPath}/contrib/extraction/lib"
 			into "${deployDir}/lib/solr"
 		}
 		copy {
-			from "${zipDirPath}/example/exampledocs/post.jar"
+			from "${unzippedPath}/example/exampledocs/post.jar"
 			into "${deployDir}/bin"
 		}
 	}
