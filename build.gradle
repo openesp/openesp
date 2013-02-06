@@ -6,6 +6,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 project.version = openEspVersion
 println "OpenESP version " + openEspVersion + " with tomcat " + tomcatVersion + ", Solr " + solrVersion
+println "TEMP dir: " + tmpDir
 
 apply plugin: 'java'
 project.ext.basename = "openesp"
@@ -20,10 +21,11 @@ def tomcatDir = "${deployDir}/tomcat"
 
 defaultTasks 'dist' 
 
-task cleanAll (dependsOn: ':openesp-solr:clean') { 
+task cleanTemp { 
   doLast {
-    println "Cleaning"
-    delete 'build'
+    println "Cleaning temp files"
+    delete "${tmpDir}/solr*.zip"
+    delete "${tmpDir}/${tomcatName}.zip"
   }
 }
 
