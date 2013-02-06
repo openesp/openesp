@@ -20,7 +20,18 @@ Welcome as a user and as a contributor!
 
 Building
 ========
-The project uses Gradle as build system, and to build the distro, simply run:
+The project uses Gradle and Ant as build systems. Run it as normal, or
+if you don't have Gradle installed already, simply run the service wrapper:
+
+Linux/OSX:
+
+    ./gradlew
+    
+Windows:
+
+    gradlew.bat
+
+Alternatively, if you have Gradle already, simply run 
 
     gradle
 

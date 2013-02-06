@@ -4,12 +4,16 @@
 //
 import org.apache.tools.ant.filters.ReplaceTokens
 
+project.version = openEspVersion
+
+println "Building OpenESP version " + openEspVersion + " with tomcat " + tomcatVersion + ", Solr " + solrVersion
+
 apply plugin: 'java'
 project.ext.basename = "openesp"
 
 def tmpDir = 'tmp'
 def deployDir = 'build/openesp'
-def openEspZipName = 'openesp-${openEspVersion}.zip'
+def openEspZipName = "openesp-${openEspVersion}.zip"
 
 def tomcatName = "apache-tomcat-${tomcatVersion}"
 def architecture = "-windows-x64"
@@ -98,6 +102,10 @@ task doZip (type: Zip, dependsOn: ['deployServiceWrapper', 'deployOverlay']) {
   doLast {
     println "Packaging into ZIP ${doZip.archiveName}"
   }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.2'
 }
 
 task dist (dependsOn: 'doZip') {
