@@ -8,7 +8,7 @@ project.version = openEspVersion
 apply plugin: 'java'
 project.ext.basename = "openesp"
 
-project.ext.set("tmpDir", System.getProperty("java.io.tmpdir"))
+project.ext.set("tmpDir", new File(".").getCanonicalPath()+"/tmp/")
 def deployDir = "build/openesp"
 def openEspZipName = "openesp-${openEspVersion}.zip"
 def tomcatName = "apache-tomcat-${tomcatVersion}"
@@ -24,15 +24,16 @@ defaultTasks 'dist'
 task cleanTemp { 
   doLast {
     println "Cleaning temp files"
-    delete "${tmpDir}/solr*.zip"
-    delete "${tmpDir}/${tomcatName}.zip"
+    delete tmpDir
   }
 }
 
 task init {
     outputs.file 'build/openesp/version.properties'
+    outputs.dir tmpDir
     doLast {
       mkdir deployDir
+      mkdir "${tmpDir}"
       copy {
         from 'initial'
         into "${deployDir}"
@@ -62,7 +63,6 @@ task getTomcat (dependsOn: 'init'){
 }
 
 task deployTomcat (dependsOn: 'getTomcat') {
-  outputs.file "${tomcatDir}/LICENSE"
   def tomcatZipFile = "${tmpDir}${tomcatName}.zip"
   def tomcatFromDir = "${deployDir}/${tomcatName}"
   def tomcatToDir = "${tomcatDir}"
@@ -89,7 +89,6 @@ task deploySolr (dependsOn: [':openesp-solr:organizeForOpenESP', 'deployTomcat']
 }
 
 task deployServiceWrapper (dependsOn: ['deployTomcat']) {
-  //outputs.file "${deployDir}/bin/OpenESPw.exe"
   doLast {
     println "Copying service wrappers from ${tomcatDir}/bin into bin folder"
     copy {
@@ -115,7 +114,8 @@ task deployOverlay (dependsOn: ['deploySolr', 'deployTomcat']) {
 
 task doZip (type: Zip, dependsOn: ['deployServiceWrapper', 'deployOverlay']) {
   outputs.file "${doZip.archiveName}"
-  from "${deployDir}"
+  from "build"
+  include 'openesp/**'
   doLast {
     println "Packaging into ZIP ${doZip.archiveName}"
   }

@@ -37,6 +37,12 @@ Alternatively, if you have Gradle already, simply run
 
 You'll then get the distro in build/distributions/openesp-x.y.zip
 
+Running
+=======
+1. unzip build/distributions/openesp-x.y.zip
+2. cd openesp/bin
+3. ./openesp.sh
+
 Structure
 =========
 
