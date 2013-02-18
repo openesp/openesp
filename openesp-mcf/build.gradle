@@ -1,0 +1,87 @@
+// Build file for MCF as part of OpenESP
+def fullName = "apache-manifoldcf-${mcfVersion}"
+def zipName = "${fullName}-bin.zip"
+//def binUrl = "http://apache.uib.no/manifoldcf/${zipName}"
+// Temp workaround using patched version (see https://issues.apache.org/jira/browse/CONNECTORS-648)
+def binUrl = "https://dl.dropbox.com/u/20080302/apache-manifoldcf-1.1.1-bin.zip"
+def buildDir = 'build'
+def zipPath = "${tmpDir}/${zipName}"
+def unzippedPath = "${buildDir}/${fullName}"
+def deployDir = "${buildDir}/openesp"
+
+defaultTasks 'organizeForOpenESP' 
+
+task clean {
+	doLast {
+		delete buildDir
+	} 
+}
+
+task init {
+	outputs.dir buildDir
+	doLast {
+		mkdir buildDir
+	}
+}
+
+task getMcf (dependsOn: 'init') {
+	outputs.file zipPath
+	doLast {
+    println "Downloading MCF ${mcfVersion} into ${tmpDir}"
+		ant {
+			get src:binUrl,
+			dest:tmpDir, verbose:"true"
+		}
+	}
+}
+
+task unpackMcf (dependsOn: 'getMcf') {
+	outputs.file "${unzippedPath}/README.txt"
+	doLast {
+    println "Unpacking Mcf into ${buildDir}"
+		copy {
+			from zipTree(zipPath)
+			into "${buildDir}"
+		}
+	}
+}
+
+task organizeForOpenESP (dependsOn: 'unpackMcf') {
+	outputs.file "${deployDir}/webapps/mcf-crawler-ui.war"
+  def warPath = "${unzippedPath}/web/war"
+	doLast {
+		copy {
+			from warPath
+			into "${deployDir}/webapps"
+		}
+		copy {
+			from 'tomcat-contexts'
+			include 'mcf.xml'
+			into "${deployDir}/tomcat/conf/Catalina/localhost"
+		}
+		copy {
+			from 'conf'
+//			filter(ReplaceTokens, tokens: [openesp_home: ])
+			into "${deployDir}/conf/mcf"
+		}
+		copy {
+			from "${unzippedPath}/connector-lib"
+			into "${deployDir}/lib/mcf"
+		}
+		copy {
+			from "${unzippedPath}/connector-lib-proprietary"
+			into "${deployDir}/lib/mcf"
+		}
+		copy {
+			from "${unzippedPath}/example/lib"
+			exclude 'jetty*'
+			into "${deployDir}/lib/mcf"
+		}
+		copy {from "${unzippedPath}/connectors.xml" into "${deployDir}/conf/mcf"}
+		copy {
+			from "${unzippedPath}/solr-integration/solr-4.x"
+			into "${deployDir}/lib/solr"
+		}
+		new File("${deployDir}/logs/mcf").mkdirs()
+	}
+}

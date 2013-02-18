@@ -2,12 +2,11 @@ gradle-svnkit
 target
 tmp
 src
-openesp-mcf
 .gradle
 .metadata
 build
 openesp-solr/.project
 openesp-installer
 *.odt#
-
+INBOX
 documentation/OpenESP admin guide.pdf

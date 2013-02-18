@@ -92,5 +92,6 @@ task organizeForOpenESP (dependsOn: 'unpackSolr') {
 			from "${unzippedPath}/example/exampledocs/post.jar"
 			into "${deployDir}/bin"
 		}
+		new File("${deployDir}/logs/solr").mkdirs()
 	}
 }

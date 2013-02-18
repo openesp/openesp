@@ -41,7 +41,7 @@ Running
 =======
 1. unzip build/distributions/openesp-x.y.zip
 2. cd openesp/bin
-3. ./openesp.sh
+3. ./run.sh
 
 Structure
 =========
