@@ -1,2 +1,3 @@
 include 'openesp-solr'
 include 'openesp-mcf'
+include 'openesp-admin'

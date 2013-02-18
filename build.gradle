@@ -103,6 +103,16 @@ task deployMcf (dependsOn: [':openesp-mcf:organizeForOpenESP', 'deployTomcat']) 
   }
 }
 
+task deployAdmin (dependsOn: [':openesp-admin:organizeForOpenESP', 'deployTomcat']) {
+  doLast {
+    println "Deploying Admin webapp into ${deployDir}"
+    copy {
+      from "openesp-admin/build/openesp"
+      into "${deployDir}"
+    }
+  }
+}
+
 task deployServiceWrapper (dependsOn: ['deployTomcat']) {
   doLast {
     println "Copying service wrappers from ${tomcatDir}/bin into bin folder"
@@ -115,8 +125,7 @@ task deployServiceWrapper (dependsOn: ['deployTomcat']) {
   }
 }
 
-task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployTomcat']) {
-  outputs.file "${deployDir}/conf/logging.properties"
+task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployAdmin', 'deployTomcat']) {
   doLast {
     println "Deploying overlay to ${deployDir}"
     copy {
@@ -126,8 +135,13 @@ task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployTomcat']) {
   }
 }
 
+task bld (dependsOn: ['deployServiceWrapper', 'deployOverlay']) {
+  doLast {
+    println "Project compiled into ${deployDir}"
+  }
+}
 
-task doZip (type: Zip, dependsOn: ['deployServiceWrapper', 'deployOverlay']) {
+task doZip (type: Zip, dependsOn: 'bld') {
   outputs.file "${doZip.archiveName}"
   from "build"
   include 'openesp/**'

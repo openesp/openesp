@@ -1,11 +1,8 @@
-gradle-svnkit
 target
 tmp
-src
 .gradle
 .metadata
 build
-openesp-solr/.project
 openesp-installer
 *.odt#
 INBOX
