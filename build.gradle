@@ -8,15 +8,18 @@ project.version = openEspVersion
 apply plugin: 'java'
 project.ext.basename = "openesp"
 
-project.ext.set("tmpDir", new File(".").getCanonicalPath()+"/tmp/")
+project.ext.set("tmpDir", "${rootDir}/tmp/")
 def deployDir = "build/openesp"
 def openEspZipName = "openesp-${openEspVersion}.zip"
 def tomcatName = "apache-tomcat-${tomcatVersion}"
 def architecture = "-windows-x64"
-def tomcatUrl = "http://apache.uib.no/tomcat/tomcat-7/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
+def tomcatUrl = "http://apache.uib.no/tomcat/tomcat-${tomcatVersion.split("\\.")[0]}/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
 def tomcatDir = "${deployDir}/tomcat"
 
-println "OpenESP version " + openEspVersion + " with tomcat " + tomcatVersion + ", Solr " + solrVersion
+println "OpenESP version " + openEspVersion + 
+        " with tomcat " + tomcatVersion + 
+        ", Solr " + solrVersion + 
+        ", ManifoldCF " + mcfVersion
 println "TEMP dir: " + tmpDir
 
 defaultTasks 'dist' 
@@ -74,6 +77,7 @@ task deployTomcat (dependsOn: 'getTomcat') {
     }
     println "Renaming ${tomcatFromDir} to ${tomcatToDir}"
     new File(tomcatFromDir).renameTo(new File(tomcatToDir))    
+    ant.chmod(dir: "${deployDir}/tomcat/bin", perm: '755', includes: '*')
   }
 }
 
@@ -88,20 +92,40 @@ task deploySolr (dependsOn: [':openesp-solr:organizeForOpenESP', 'deployTomcat']
   }
 }
 
+task deployMcf (dependsOn: [':openesp-mcf:organizeForOpenESP', 'deployTomcat']) {
+//  outputs.file "${deployDir}/conf/mcf/properties.xml"
+  doLast {
+    println "Deploying MCF into ${deployDir}"
+    copy {
+      from "openesp-mcf/build/openesp"
+      into "${deployDir}"
+    }
+  }
+}
+
+task deployAdmin (dependsOn: [':openesp-admin:organizeForOpenESP', 'deployTomcat']) {
+  doLast {
+    println "Deploying Admin webapp into ${deployDir}"
+    copy {
+      from "openesp-admin/build/openesp"
+      into "${deployDir}"
+    }
+  }
+}
+
 task deployServiceWrapper (dependsOn: ['deployTomcat']) {
   doLast {
     println "Copying service wrappers from ${tomcatDir}/bin into bin folder"
     copy {
       from "${tomcatDir}/bin"
       include '**/*.exe'
-      rename 'tomcat7(.*)', 'OpenESP$1'
+      rename "tomcat${tomcatVersion.split("\\.")[0]}(.*)", 'OpenESP$1'
       into "${deployDir}/bin"
     }
   }
 }
 
-task deployOverlay (dependsOn: ['deploySolr', 'deployTomcat']) {
-  outputs.file "${deployDir}/conf/logging.properties"
+task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployAdmin', 'deployTomcat']) {
   doLast {
     println "Deploying overlay to ${deployDir}"
     copy {
@@ -111,8 +135,13 @@ task deployOverlay (dependsOn: ['deploySolr', 'deployTomcat']) {
   }
 }
 
+task bld (dependsOn: ['deployServiceWrapper', 'deployOverlay']) {
+  doLast {
+    println "Project compiled into ${deployDir}"
+  }
+}
 
-task doZip (type: Zip, dependsOn: ['deployServiceWrapper', 'deployOverlay']) {
+task doZip (type: Zip, dependsOn: 'bld') {
   outputs.file "${doZip.archiveName}"
   from "build"
   include 'openesp/**'

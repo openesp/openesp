@@ -5,9 +5,11 @@
 # For production use, please start OpenESP as a service
 ##########################################################
 
-echo "Starting OpenESP"
-
-OPENESP_HOME=`pwd`/..
+pushd $(dirname "${0}") > /dev/null
+BASEDIR=$(pwd -L)
+popd > /dev/null
+OPENESP_HOME=$BASEDIR/..
+echo "Starting OpenESP (OPENESP_HOME=$OPENESP_HOME)"
 SOLR_HOME=$OPENESP_HOME/conf/solr
 SOLR_DATA_DIR=$OPENESP_HOME/data/solr
 export CATALINA_OPTS="-server \
@@ -21,10 +23,11 @@ export CATALINA_OPTS="-server \
                      -Xms512m -Xmx1024m \
                      -Dsolr.solr.home=$SOLR_HOME \
                      -Dopenesp.home=$OPENESP_HOME \
-                     -Dsolr.data.dir=$SOLR_DATA_DIR"
+                     -Dsolr.data.dir=$SOLR_DATA_DIR \
+                     -Dorg.apache.manifoldcf.configfile=$OPENESP_HOME/conf/mcf/properties.xml"
 echo CATALINA_OPTS is $CATALINA_OPTS
 
-# -Djava.util.logging.config.file=$OPENESP_HOME/conf/logging.properties
+# -Djava.util.logging.config.file=$OPENESP_HOME/conf/solr/logging.properties
 
 pushd $OPENESP_HOME/tomcat/bin
 sh ./catalina.sh run

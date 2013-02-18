@@ -1,0 +1,24 @@
+apply plugin: 'war'
+
+def deployDir = "${buildDir}/openesp"
+
+defaultTasks 'organizeForOpenESP' 
+
+task organizeForOpenESP (dependsOn: 'war') {
+	doLast {
+/*    copy {
+      from 'build/libs/openesp-admin.war'
+      into "${deployDir}/webapps/"
+    }
+*/
+		copy {
+			from zipTree('build/libs/openesp-admin.war')
+			into "${deployDir}/webapps/openesp-admin/"
+		}
+    copy {
+      from 'src/main/context'
+      into "${deployDir}/tomcat/conf/Catalina/localhost"
+    }
+
+	}
+}
