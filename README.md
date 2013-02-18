@@ -11,8 +11,9 @@ the globe to be up and running with searching their databases, file systems,
 ECMs and other repositories within minutes after downloading OpenESP. For that
 reason we include [Tomcat](http://tomcat.apache.org/) and [ManifoldCF](http://manifoldcf.apache.org/) out of the box.
 
-The project is initiated and sponsored by [Cominvent AS](www.cominvent.com)
-and lives on www.openesp.org and here on GitHub.
+The project is maintained by committers from the [Open Enterprise Search Network](http://openesn.net/).
+Product homepage is at [www.openesp.org](http://openesn.net/openesp.html) and the code is here at GitHub.
+We very much welcome bug reports and [pull requests](https://help.github.com/articles/using-pull-requests) from anyone using the product.
 
 Building
 ========
@@ -65,7 +66,6 @@ Please check the [issue tracker](https://github.com/openesp/openesp/issues) for 
 The next major features planned include
 
 * Installer
-* Admin console
 * SSL security
 
 Contributing
