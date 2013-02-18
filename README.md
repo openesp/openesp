@@ -45,7 +45,7 @@ From distribution zip:
 2. cd openesp/bin
 3. ./run.sh
 
-Now you can visit OpenESP's admin screen at http://localhost:8080/
+Now you can visit OpenESP's admin screen at http://localhost:18080/
 
 Structure
 =========

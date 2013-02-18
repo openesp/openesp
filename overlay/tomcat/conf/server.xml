@@ -19,7 +19,7 @@
      define subcomponents such as "Valves" at this level.
      Documentation at /docs/config/server.html
  -->
-<Server port="8005" shutdown="SHUTDOWN">
+<Server port="18005" shutdown="SHUTDOWN">
   <!-- Security listener. Documentation at /docs/config/listeners.html
   <Listener className="org.apache.catalina.security.SecurityListener" />
   -->
@@ -67,9 +67,9 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="8080" protocol="HTTP/1.1" URIEncoding="UTF-8"
+    <Connector port="18080" protocol="HTTP/1.1" URIEncoding="UTF-8"
                connectionTimeout="20000"
-               redirectPort="8443" />
+               redirectPort="18443" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
@@ -81,7 +81,7 @@
          This connector uses the JSSE configuration, when using APR, the
          connector should be using the OpenSSL style configuration
          described in the APR documentation -->
-    <Connector port="8443" SSLEnabled="true" URIEncoding="UTF-8"
+    <Connector port="18443" SSLEnabled="true" URIEncoding="UTF-8"
                protocol="org.apache.coyote.http11.Http11Protocol"
                maxThreads="150" scheme="https" secure="true"
                keystoreFile="conf/ssl/server.jks" keystoreType="JKS" keystorePass="password"
@@ -91,7 +91,7 @@
     />
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
-    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+    <Connector port="18009" protocol="AJP/1.3" redirectPort="18443" />
 
 
     <!-- An Engine represents the entry point (within Catalina) that processes
