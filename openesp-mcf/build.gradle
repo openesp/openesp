@@ -36,7 +36,7 @@ task getMcf (dependsOn: 'init') {
 }
 
 task unpackMcf (dependsOn: 'getMcf') {
-	outputs.file "${unzippedPath}/README.txt"
+//	outputs.file "${unzippedPath}/README.txt"
 	doLast {
     println "Unpacking Mcf into ${buildDir}"
 		copy {
@@ -47,7 +47,7 @@ task unpackMcf (dependsOn: 'getMcf') {
 }
 
 task organizeForOpenESP (dependsOn: 'unpackMcf') {
-	outputs.file "${deployDir}/webapps/mcf-crawler-ui.war"
+//	outputs.file "${deployDir}/webapps/mcf-crawler-ui.war"
   def warPath = "${unzippedPath}/web/war"
 	doLast {
 		copy {
