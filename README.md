@@ -15,10 +15,14 @@ The project is maintained by committers from the [Open Enterprise Search Network
 Product homepage is at [www.openesp.org](http://openesn.net/openesp.html) and the code is here at GitHub.
 We very much welcome bug reports and [pull requests](https://help.github.com/articles/using-pull-requests) from anyone using the product.
 
+Downloads
+=========
+We have not yet made any releases, so you have to build the product yourself.
+Don't be afraid, it's very easy :)
+
 Building
 ========
-The project uses [Gradle](http://www.gradle.org/) build system. Run it as normal, or
-if you don't have Gradle installed already, simply run the service wrapper:
+The project uses [Gradle](http://www.gradle.org/) build system. If you don't have Gradle installed already, simply run the following wrapper command:
 
 Linux/OSX:
 
@@ -39,14 +43,34 @@ Running
 From build directory:
 
     ./build/openesp/bin/run.sh
+    
+Windows:
+
+    build\openesp\bin\run.bat
 
 From distribution zip:
 
-1. unzip openesp-x.y.zip
-2. cd openesp/bin
-3. ./run.sh
+Linux/OSX:
+
+    jar xf openesp-x.y.zip
+    ./openesp/bin/run.sh
+
+Windows:
+
+    jar xf openesp-x.y.zip
+    openesp\bin\run.bat
 
 Now you can visit OpenESP's admin screen at http://localhost:18080/
+
+We will soon enable installing as a service, so you can launch OpenESP in the background.
+
+Enabling/disabling apps
+=======================
+After install, if you want to disable ManifolfCF (MCF) because you won't need it, simply run
+
+    ./bin/openespctl -d mcf
+    
+and then restart tomcat
 
 Structure
 =========
