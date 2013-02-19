@@ -7,7 +7,7 @@ Root admin application of OpenESP
     <title>OpenESP</title>
     <style type="text/css" media="screen">
     body {
-      font: sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
     </style>
     </head>
