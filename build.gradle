@@ -42,7 +42,7 @@ task init {
         into "${deployDir}"
       }
       println "Creating versions file"
-      def fields = ["openesp.version":openEspVersion, "solr.version":solrVersion, "tomcat.version":tomcatVersion]
+      def fields = ["openesp.version":openEspVersion, "solr.version":solrVersion, "tomcat.version":tomcatVersion, "mcf.version":mcfVersion]
       new File("${deployDir}/version.properties").withWriter { out ->
           fields.each() { key, value ->
               out.writeLine("${key} = ${value}")

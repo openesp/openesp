@@ -68,7 +68,7 @@
          Define a non-SSL HTTP/1.1 Connector on port 8080
     -->
     <Connector port="18080" protocol="HTTP/1.1" URIEncoding="UTF-8"
-               connectionTimeout="20000"
+               connectionTimeout="20000" SSLEnabled="false"
                redirectPort="18443" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
