@@ -1,5 +1,4 @@
-Open Enterprise Search Platform (OpenESP)
-=========================================
+# Open Enterprise Search Platform (OpenESP)
 Welcome to OpenESP, the Open Source Enterprise Search Platform.
 The project develops an [Apache 2.0 licensed](http://www.apache.org/licenses/LICENSE-2.0.html) distro of [Apache Solr](http://lucene.apache.org/solr/).
 With "distro", we mean Solr as the core plus other components which are
@@ -15,13 +14,11 @@ The project is maintained by committers from the [Open Enterprise Search Network
 Product homepage is at [www.openesp.org](http://openesn.net/openesp.html) and the code is here at GitHub.
 We very much welcome bug reports and [pull requests](https://help.github.com/articles/using-pull-requests) from anyone using the product.
 
-Downloads
-=========
+## Downloads
 We have not yet made any releases, so you have to build the product yourself.
 Don't be afraid, it's very easy :)
 
-Building
-========
+## Building
 The project uses [Gradle](http://www.gradle.org/) build system. If you don't have Gradle installed already, simply run the following wrapper command:
 
 Linux/OSX:
@@ -38,8 +35,7 @@ Alternatively, if you have Gradle already, simply run
 
 You'll then get the distro in build/distributions/openesp-x.y.zip
 
-Running
-=======
+## Running
 From build directory:
 
     ./build/openesp/bin/run.sh
@@ -64,36 +60,59 @@ Now you can visit OpenESP's admin screen at http://localhost:18080/
 
 We will soon enable installing as a service, so you can launch OpenESP in the background.
 
-Enabling/disabling apps
-=======================
-After install, if you want to disable ManifolfCF (MCF) because you won't need it, simply run
+## The openespctl script
+After install, you may want to do certain tasks, and there is a script called openespctl available for certain common tasks. Type ```./bin/openespctl help``` for a usage explanation.
 
-    ./bin/openespctl -d mcf
+### Enable and disable apps
+if you want to disable ManifolfCF (MCF) because you won't need it, simply run
+
+    ./bin/openespctl disable mcf
     
 and then restart tomcat
 
-Structure
-=========
+### Change port number
+To change the port number from default 18080 after install, do
 
-* initial: this is the initial folder structure which will be included in distro
-* overlay: everything in this folder will be overlaid AFTER assembling Solr, Tomcat etc
-* documentation: for developing user documentation. PDF should be placed in initial/doc
-* openesp-solr: Sub project for building (or downloading) Apache Solr
-* openesp-mcf: Sub project for building (or downloading) Apache MCF
-* build.gradle: The makefile for gradle
-* gradle.properties: Specify global properties here, such as versions for Solr, Tomcat etc
-* build: After running gradle, the release artifacts are generated here
+    ./bin/openespctl port 8983
 
-Roadmap
-=======
+## File structure
+### Deployment layout
+Once deployed, the structure of OpenESP folders is as follows:
+```
+openesp
+  ├── bin        : Start scripts like openespctl
+  ├── conf       : Configuration for Solr and MCF
+  ├── doc        : Admin guide
+  ├── lib        : Jar file plugins for Solr and MCF
+  ├── logs       : Log output folders
+  ├── tomcat     : Tomcat application server
+  └── webapps    : Location of web application (war) files
+```
+
+### Development (source) layout
+Here's the layout of the file layout of the source tree
+```
+openesp
+  ├── build.gradle         : build script
+  ├── gradle.properties    : global properties, like component versions
+  ├── initial              : this is the initial folder structure which will be included in distro
+  ├── overlay              : everything in this folder will be overlaid AFTER assembling Solr, Tomcat etc
+  ├── documentation        : for developing user documentation. PDF should be placed in initial/doc
+  ├── openesp-solr         : Sub project for building (or downloading) Apache Solr
+  ├── openesp-mcf          : Sub project for building (or downloading) Apache MCF
+  ├── build.gradle         : The makefile for gradle
+  ├── gradle.properties    : Specify global properties here, such as versions for Solr, Tomcat etc
+  └── build                : After running gradle, the release artifacts are generated here
+```
+
+## Roadmap
 Please check the [issue tracker](https://github.com/openesp/openesp/issues) for bugs and future plans.
 The next major features planned include
 
 * Installer
 * SSL security
 
-Contributing
-============
+## Contributing
 We adopt the [Apache Software Foundation](http://www.apache.org/) project develpment methodology,
 doing all development in the open.
 
