@@ -3,4 +3,5 @@ pushd $(dirname "${0}") > /dev/null
 BASEDIR=$(pwd -L)
 popd > /dev/null
 
-java -jar $BASEDIR/groovy.jar $BASEDIR/openespctl.groovy $*
+java -jar "$BASEDIR/groovy.jar" "$BASEDIR/openespctl.groovy" $*
+

@@ -132,7 +132,6 @@ public class AppControl extends CtlBase {
  */
 public class PortReplace extends CtlBase {
   public static void main(String[] args) {
-    println "ARGS="+args
     def cli = new CliBuilder(usage: 'openespctl port <new port number> [<new ssl port number>]')
     def opt = cli.parse(args)
     cli.with {
