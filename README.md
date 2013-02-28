@@ -15,11 +15,22 @@ Product homepage is at [www.openesp.org](http://openesn.net/openesp.html) and th
 We very much welcome bug reports and [pull requests](https://help.github.com/articles/using-pull-requests) from anyone using the product.
 
 ## Downloads
-We have not yet made any releases, so you have to build the product yourself.
-Don't be afraid, it's very easy :)
+Download a (beta) version of OpenESP 0.3 from [this location](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln).
+
+* [openesp-0.3.zip](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln) - Pure binary zip distribution (no installer, simply unpack and run)
+* [OpenESP-Setup-0.3.exe](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln) - Native Windows installer
+* [openesp-install-0.3.jar](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln) - Cross-platform installer (for Linux, Mac, Windows)
+
+To start the cross-platform installer you need Java preinstalled. Double-click or run ```java -jar openesp-install-0.3.jar
+``` to run.
 
 ## Building
-The project uses [Gradle](http://www.gradle.org/) build system. If you don't have Gradle installed already, simply run the following wrapper command:
+If you prefer to build the product from source or hack yourself, please first download the source distribution
+
+* Click the "ZIP" icon to download a source distribution ZIP file snapshot
+* Or clone the Git repo using command ```git clone git@github.com:openesp/openesp.git```
+
+Now you have the source. The project uses [Gradle](http://www.gradle.org/) build system. If you don't have Gradle installed already, simply run the following wrapper command:
 
 Linux/OSX:
 
@@ -34,6 +45,8 @@ Alternatively, if you have Gradle already, simply run
     gradle
 
 You'll then get the distro in build/distributions/openesp-x.y.zip
+
+**NOTE:** The currente source will not build the installer, only the zip distro. So if you require an installer, please use one of the downloads above.
 
 ## Running
 From build directory:
@@ -58,7 +71,7 @@ Windows:
 
 Now you can visit OpenESP's admin screen at http://localhost:18080/
 
-We will soon enable installing as a service, so you can launch OpenESP in the background.
+If you downloaded the installer you will also be able to install as a service on Windows or Linux and then run in the background.
 
 ## The openespctl script
 After install, you may want to do certain tasks, and there is a script called openespctl available for certain common tasks. Type ```./bin/openespctl help``` for a usage explanation.
@@ -112,8 +125,16 @@ The next major features planned include
 * Installer
 * SSL security
 
-## Contributing
-We adopt the [Apache Software Foundation](http://www.apache.org/) project develpment methodology,
-doing all development in the open.
+## Engage with the community
+If you use the product, please engage with the community
+
+### Discussions
+Join the [community at Google+](https://plus.google.com/communities/103998803341318319412) to ask questions and join discussions. For pure Tomcat, Solr or Manifold questions you may also engage directly with their respective communities.
+
+### File an issue
+If you found a bug or have a feature request, please [file an issue](https://github.com/openesp/openesp/issues)
+
+### Contribute back your changes
+Contributing through GitHub is easy. Whenever you have done some changes you'd like to see in the next release, issue a [pull request](https://help.github.com/articles/using-pull-requests). Note that you do not need to file a separate issue when using pull requests.
 
 Welcome as a user and as a contributor!
