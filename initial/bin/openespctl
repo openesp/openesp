@@ -4,4 +4,3 @@ BASEDIR=$(pwd -L)
 popd > /dev/null
 
 java -jar "$BASEDIR/groovy.jar" "$BASEDIR/openespctl.groovy" $*
-

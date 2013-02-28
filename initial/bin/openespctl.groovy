@@ -2,8 +2,11 @@ import groovy.xml.XmlUtil
 import groovy.xml.StreamingMarkupBuilder
 import groovy.util.slurpersupport.GPathResult
 
-def openesp = new File(".").getAbsoluteFile().getParentFile().getParentFile().getCanonicalPath()
-def sep = System.getProperties().get("file.separator")
+// Find script home and set that on base class
+def scriptDir = new File(getClass().protectionDomain.codeSource.location.path).parent
+def openespDir = new File(scriptDir).getAbsoluteFile().getParentFile().getCanonicalPath()
+def openEspEnv = System.getenv().get("OPENESP_HOME")
+CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
 // List available commands
 commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'help']
@@ -74,9 +77,22 @@ def usage() {
  * Base class defining some static variables
  */
 public class CtlBase {
-  static openesp = new File(".").getAbsoluteFile().getParentFile().getParentFile().getCanonicalPath()
   static sep = System.getProperties().get("file.separator")
   static apps = ['solr', 'mcf']
+  static openesp = null
+
+  static{
+    if (openesp == null) {
+      def defOpenespDir = new File(".").getAbsoluteFile().getParentFile().getParentFile().getCanonicalPath()
+      def openEspEnv = System.getenv().get("OPENESP_HOME")
+      openesp = (openEspEnv != null) ? openEspEnv : defOpenespDir
+    }
+  }
+  
+  /* Set home directory for OpenESP */
+  public static setHome(home){
+    openesp = home
+  }
   
   /**
    * Function to manipulate a text file in place
@@ -119,7 +135,11 @@ public class AppControl extends CtlBase {
       if (success) {
         println "${enable ? "Enabled" : "Disabled"} app ${app}. Please restart to take effect."
       } else {
-        println "ERROR: App ${app} is already ${enable ? "enabled" : "disabled"}"
+        if (!new File(f+".xml").exists() && !new File(f+".xml_disabled").exists()) {
+          println "ERROR: Could not find descriptor file, is ${openesp} the correct OPENESP_HOME?"
+        } else {
+          println "ERROR: App ${app} is already ${enable ? "enabled" : "disabled"}"
+        }
       }
     } else {
       println "Unknown app ${app}, please use one of ${apps}"
@@ -147,10 +167,14 @@ public class PortReplace extends CtlBase {
     def serverFile = new File([openesp, 'tomcat', 'conf', 'server.xml'].join(sep))
     
     PortReplace pr = new PortReplace()
-    def res = pr.change(serverFile, port, sslport)
-    println "Changed normal port from ${res[0]} to ${port}"
-    if (sslport != null)
-      println "Changed ssl port from ${res[1]} to ${sslport}"
+    try {
+      def res = pr.change(serverFile, port, sslport)
+      println "Changed normal port from ${res[0]} to ${port}"
+      if (sslport != null)
+        println "Changed ssl port from ${res[1]} to ${sslport}"
+    } catch (Exception e) {
+      println "Port change failed. Is ${openesp} the correct OPENESP_HOME?"
+    }
   }
 
   /**
