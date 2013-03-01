@@ -17,9 +17,9 @@ We very much welcome bug reports and [pull requests](https://help.github.com/art
 ## Downloads
 Download a (beta) version of OpenESP 0.3 from [this location](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln).
 
-* [openesp-0.3.zip](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln) - Pure binary zip distribution (no installer, simply unpack and run)
-* [OpenESP-Setup-0.3.exe](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln) - Native Windows installer
-* [openesp-install-0.3.jar](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/vMcnjf2lln) - Cross-platform installer (for Linux, Mac, Windows)
+* [openesp-0.3.zip](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/033BCUpg5I/openesp-0.3.zip) - Pure binary zip distribution (no installer, simply unpack and run)
+* [OpenESP-Setup-0.3.exe](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/U1GRSyO1fB/OpenESP-Setup-0.3.exe) - Native Windows installer
+* [openesp-install-0.3.jar](https://www.dropbox.com/sh/ylblwnhk1r7gjs0/Cl8UxzhsWR/openesp-install-0.3.jar) - Cross-platform installer (for Linux, Mac, Windows)
 
 To start the cross-platform installer you need Java preinstalled. Double-click or run ```java -jar openesp-install-0.3.jar
 ``` to run.
