@@ -4,7 +4,7 @@ import groovy.util.slurpersupport.GPathResult
 
 // Find script home and set that on base class
 def scriptDir = new File(getClass().protectionDomain.codeSource.location.path).parent
-def openespDir = new File(scriptDir).getAbsoluteFile().getParentFile().getCanonicalPath()
+def openespDir = new File(scriptDir).getAbsoluteFile().getParentFile().getCanonicalPath().replaceAll("%20", " ");
 def openEspEnv = System.getenv().get("OPENESP_HOME")
 CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
