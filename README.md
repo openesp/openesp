@@ -28,7 +28,7 @@ To start the cross-platform installer you need Java preinstalled. Double-click o
 If you prefer to build the product from source or hack yourself, please first download the source distribution
 
 * Click the "ZIP" icon to download a source distribution ZIP file snapshot
-* Or clone the Git repo using command ```git clone git@github.com:openesp/openesp.git```
+* Or clone the Git repo using command ```git clone https://github.com/openesp/openesp.git```
 
 Now you have the source. The project uses [Gradle](http://www.gradle.org/) build system. If you don't have Gradle installed already, simply run the following wrapper command:
 

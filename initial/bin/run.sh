@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 ##########################################################
 # This is a DRAFT start script for development use only.
