@@ -1,4 +1,4 @@
-def cli = new CliBuilder(usage: 'install-windows-service.bat [-a] -s name -jm jvmMem -jh javaHome -p installPath -sh solrHome -sd solrDataDir -sl solrLogDir -ss startService -sc solrCloud -zr dzkrun -zh dzkhost', 
+def cli = new CliBuilder(usage: 'install-windows-service.bat [-a] -s name -jm jvmMem -jh javaHome -p installPath -sh solrHome -sd solrDataDir -sl solrLogDir -ss startService -sc solrCloud -zr dzkrun -zh dzkhost',
                          header: 'Windows Service Installer')
 cli.a longOpt: 'auto','auto install the service'
 cli.s longOpt: 'serviceName', required:true, args: 1, 'Windows service name, REQUIRED'
@@ -52,6 +52,7 @@ file.eachLine { line ->
 }
 
 
+
 if (!opt) {
     //should never happen, since I don't have required parameters in CliBuilder
     println "error processing arguments\n"
@@ -59,8 +60,8 @@ if (!opt) {
 
 		serviceName = opt.s
 
-		def servCmd = executable + " " + jvmMem + " \""+installPath+"\" 1 \"" + solrHome+"\" \"" + solrDataDir+"\" \"" + solrLogDir + "\" " + startService +" \"" + javaHome + "\" " + serviceName + " " + solrCloud + " " + dzkrun + " " + dzkhost 
-	
+		def servCmd = executable + " " + jvmMem + " \""+installPath+"\" \"" + javaOpts +  "\" \"" + solrHome+"\" \"" + solrDataDir+"\" \"" + solrLogDir + "\" " + startService +" \"" + javaHome + "\" " + serviceName + " " + solrCloud + " " + dzkrun + " " + dzkhost 
+
 		println servCmd.execute().text
 
 
@@ -93,7 +94,7 @@ if (!opt) {
 	if(!opt.jvmMem || !opt.javaHome || !opt.installPath || !opt.solrHome || !opt.solrDataDir || !opt.solrLogDir || !opt.startService || !opt.solrCloud || !opt.dzkrun || !opt.dzkhost)
 		println errMsg2
 	else 	{
-				def servCmd = executable + " " + jvmMem + " \""+installPath+"\" 1 \"" + solrHome+"\" \"" + solrDataDir+"\" \"" + solrLogDir + "\" " + startService +" \"" + javaHome + "\" " + serviceName + " " + solrCloud + " " + dzkrun + " " + dzkhost 
+				def servCmd = executable + " " + jvmMem + " \""+installPath+"\" \"" + javaOpts +  "\" \"" + solrHome+"\" \"" + solrDataDir+"\" \"" + solrLogDir + "\" " + startService +" \"" + javaHome + "\" " + serviceName + " " + solrCloud + " " + dzkrun + " " + dzkhost 
 
 		println servCmd.execute().text
 	}
