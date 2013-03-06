@@ -9,7 +9,7 @@ def openEspEnv = System.getenv().get("OPENESP_HOME")
 CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
 // List available commands
-commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'help']
+commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'linuxdaemon', 'help']
 
 // Only legal 
 if( args.size() < 1 
@@ -45,7 +45,11 @@ switch (cmd) {
   case "upgrade":
     Upgrader.main(trimargs(args))
     break
-  
+
+  case "linuxdaemon":
+    Linuxdaemon.main(trimargs(args))
+    break
+
   default:
     println "Unknown command."
     usage()   
@@ -198,7 +202,7 @@ public class PortReplace extends CtlBase {
           }
         }
         serializeXml(server)
-    }      
+    }
     return res
   }
 }
@@ -224,4 +228,125 @@ public class Upgrader extends CtlBase {
   public boolean upgrade(existingFolder, newZip) {
     println "DEBUG: dest=${existingFolder}, zipFile=${newZip}"
   }
+}
+
+public class Linuxdaemon extends CtlBase {
+  public static void main(String[] args) {
+    def cli = new CliBuilder(usage: 'openespctl linuxdaemon [--openesphome=<home>,--name=<scriptname>,--memory=<NNm>,--javahome=<java_home>] <install | uninstall | start | stop>')
+    cli.o(longOpt:'openesphome', 'Openesp-home folder', args:1)
+    cli.j(longOpt:'javahome', 'java_home location', args:1)
+    cli.m(longOpt:'memory', 'JVM memory', args:1)
+    cli.n(longOpt:'name', required:true, 'script name', args:1)
+    cli.h(longOpt:'help', "Help")
+    def opt = cli.parse(args)
+    if(!opt) {
+      return
+    }
+    def xargs = opt.arguments()
+    if (xargs.size() < 1) {
+      cli.usage()
+      return
+    }
+    def cmd = xargs[0]
+
+    Linuxdaemon ld = new Linuxdaemon()
+
+    if(!opt.n)
+     return
+
+    if(cmd=="install") {
+       def scriptFile = new File("/etc/init.d/"+opt.n)
+       if(scriptFile.exists()) {
+              println "Linux daemon with name " + opt.n + " already exists"
+              return
+       }
+
+       if(!opt.j) {
+            println "-j|--javahome parameter is required for install"
+            return
+       }
+       if( opt.o) {
+           def directory = new File(opt.o)
+	   if(!directory.exists()) {
+		println  opt.o + " directory does not exist"
+		return
+	   }
+	   else
+            ld.install( opt.o, opt.n, opt.j, opt.m)
+       }
+       else  {
+             ld.install( openesp, opt.n, opt.j, opt.m)
+       }
+    }
+    if(cmd=="uninstall")
+       ld.uninstall( opt.n)
+    if(cmd=="start")
+       ld.start(opt.n)
+    if(cmd=="stop")
+       ld.stop(opt.n)
+  }
+
+ public boolean install(openesphome, scriptname, javahome, memory) {
+        println "Installing " + scriptname + " -- home = " + openesphome
+        
+        def file = new File(openesphome + "/bin/openesp.sh")
+        def fileText = file.text;
+	def scriptFile = new File("/etc/init.d/" + scriptname);
+	//scriptFile.write(fileText);
+
+	//Read java_opts from java_opts.properties
+	def javaOpts = "export JAVA_OPTS=\""
+
+        def joptsFile = new File(openesphome + "/bin/java_opts.properties")
+            joptsFile.eachLine { line ->
+                          if(memory && line.startsWith("-Xms"))
+                                    javaOpts = javaOpts + "-Xms"+memory+"M -Xmx"+memory+"M \\\n"
+                          else
+	                            javaOpts = javaOpts + line + " \\\n"
+        }
+        javaOpts = javaOpts + "\"\n"
+
+        file.eachLine { line ->
+                      if(line.startsWith("#OPENESP_HOME=")) {
+                          scriptFile << ("OPENESP_HOME="+openesphome+"\n")
+                      }
+                      else if(line.startsWith("#export JAVA_OPTS=")) {
+                           scriptFile << (javaOpts)
+                      }
+                      else if(line.startsWith("export JRE_HOME")) {
+                           scriptFile << ("export JRE_HOME="+javahome + "\n")
+                      }
+                      else if(line.startsWith("export JAVA_HOME")) {
+                           scriptFile << ("export JAVA_HOME="+javahome + "\n")
+                      }
+                      else {
+                           scriptFile << (line +"\n")
+                      }
+        }
+        
+        // set permissions for script to /etc/init.d
+        def cmdPerm = "sudo chmod 755 /etc/init.d/" + scriptname
+
+        println cmdPerm.execute().text
+
+ }
+ 
+ public boolean uninstall(scriptname) {
+        stop(scriptname)
+        println "Uninstalling " + scriptname
+        def cmdDel = "sudo rm -f /etc/init.d/" + scriptname
+        println cmdDel.execute().text
+ }
+
+  public boolean start(scriptname) {
+        println "Starting " + scriptname
+        def cmdStart = "sudo /etc/init.d/" + scriptname + " start"
+        println cmdStart.execute().text
+ }
+ 
+   public boolean stop(scriptname) {
+        println "Stopping " + scriptname
+        def cmdStop = "sudo /etc/init.d/" + scriptname + " stop"
+        println cmdStop.execute().text
+ }
 }
