@@ -301,8 +301,12 @@ public class Linuxdaemon extends CtlBase {
             joptsFile.eachLine { line ->
                           if(memory && line.startsWith("-Xms"))
                                     javaOpts = javaOpts + "-Xms"+memory+"M -Xmx"+memory+"M \\\n"
+                          else if(line.startsWith("-Dzkrun")) {
+                               line = line.replaceAll("+",",")
+                               javaOpts = javaOpts + line + " \\\n"
+                          }
                           else
-	                            javaOpts = javaOpts + line + " \\\n"
+                              javaOpts = javaOpts + line + " \\\n"
         }
         javaOpts = javaOpts + "\"\n"
 
@@ -325,7 +329,7 @@ public class Linuxdaemon extends CtlBase {
         }
         
         // set permissions for script to /etc/init.d
-        def cmdPerm = "sudo chmod 755 /etc/init.d/" + scriptname
+        def cmdPerm = "chmod 755 /etc/init.d/" + scriptname
 
         println cmdPerm.execute().text
 
@@ -334,19 +338,19 @@ public class Linuxdaemon extends CtlBase {
  public boolean uninstall(scriptname) {
         stop(scriptname)
         println "Uninstalling " + scriptname
-        def cmdDel = "sudo rm -f /etc/init.d/" + scriptname
+        def cmdDel = "rm -f /etc/init.d/" + scriptname
         println cmdDel.execute().text
  }
 
   public boolean start(scriptname) {
         println "Starting " + scriptname
-        def cmdStart = "sudo /etc/init.d/" + scriptname + " start"
+        def cmdStart = "/etc/init.d/" + scriptname + " start"
         println cmdStart.execute().text
  }
  
    public boolean stop(scriptname) {
         println "Stopping " + scriptname
-        def cmdStop = "sudo /etc/init.d/" + scriptname + " stop"
+        def cmdStop = "/etc/init.d/" + scriptname + " stop"
         println cmdStop.execute().text
  }
 }
