@@ -9,7 +9,11 @@ def openEspEnv = System.getenv().get("OPENESP_HOME")
 CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
 // List available commands
-commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'linuxdaemon', 'help']
+commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'help']
+commands_win = ['service']
+commands_nonwin = ['daemon']
+is_windows = System.properties['os.name'].toLowerCase().contains('windows')
+commands = commands.plus(is_windows ? commands_win : commands_nonwin)
 
 // Only legal 
 if( args.size() < 1 
@@ -46,8 +50,12 @@ switch (cmd) {
     Upgrader.main(trimargs(args))
     break
 
-  case "linuxdaemon":
+  case "daemon":
     Linuxdaemon.main(trimargs(args))
+    break
+
+  case "service":
+    println "Not yet implemented"
     break
 
   default:
@@ -232,7 +240,7 @@ public class Upgrader extends CtlBase {
 
 public class Linuxdaemon extends CtlBase {
   public static void main(String[] args) {
-    def cli = new CliBuilder(usage: 'openespctl linuxdaemon [--openesphome=<home>,--name=<scriptname>,--memory=<NNm>,--javahome=<java_home>] <install | uninstall | start | stop>')
+    def cli = new CliBuilder(usage: 'openespctl daemon [options] <install | uninstall | start | stop>')
     cli.o(longOpt:'openesphome', 'Openesp-home folder', args:1)
     cli.j(longOpt:'javahome', 'java_home location', args:1)
     cli.m(longOpt:'memory', 'JVM memory', args:1)
