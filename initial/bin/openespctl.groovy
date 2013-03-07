@@ -14,6 +14,7 @@ commands_win = ['service']
 commands_nonwin = ['daemon']
 is_windows = System.properties['os.name'].toLowerCase().contains('windows')
 commands = commands.plus(is_windows ? commands_win : commands_nonwin)
+ 
 
 // Only legal 
 if( args.size() < 1 
@@ -56,6 +57,10 @@ switch (cmd) {
 
   case "service":
     println "Not yet implemented"
+    break
+
+  case "installrecords":
+    Installrecords.main(trimargs(args))
     break
 
   default:
@@ -240,11 +245,11 @@ public class Upgrader extends CtlBase {
 
 public class Linuxdaemon extends CtlBase {
   public static void main(String[] args) {
-    def cli = new CliBuilder(usage: 'openespctl daemon [options] <install | uninstall | start | stop>')
+    def cli = new CliBuilder(usage: 'openespctl daemon [--openesphome=<home>,--name=<scriptname>,--memory=<NNm>,--javahome=<java_home>] <install | uninstall | start | stop | status>')
     cli.o(longOpt:'openesphome', 'Openesp-home folder', args:1)
     cli.j(longOpt:'javahome', 'java_home location', args:1)
     cli.m(longOpt:'memory', 'JVM memory', args:1)
-    cli.n(longOpt:'name', required:true, 'script name', args:1)
+    cli.n(longOpt:'name', 'script name', args:1)
     cli.h(longOpt:'help', "Help")
     def opt = cli.parse(args)
     if(!opt) {
@@ -259,8 +264,17 @@ public class Linuxdaemon extends CtlBase {
 
     Linuxdaemon ld = new Linuxdaemon()
 
-    if(!opt.n)
+    if(opt.h) {
+     cli.usage()
      return
+    }
+
+    if(!opt.n) {
+      println "Missing required option -n"
+      cli.usage()
+      return
+    }
+     
 
     if(cmd=="install") {
        def scriptFile = new File("/etc/init.d/"+opt.n)
@@ -286,12 +300,20 @@ public class Linuxdaemon extends CtlBase {
              ld.install( openesp, opt.n, opt.j, opt.m)
        }
     }
-    if(cmd=="uninstall")
+    else if(cmd=="uninstall")
        ld.uninstall( opt.n)
-    if(cmd=="start")
+    else if(cmd=="start")
        ld.start(opt.n)
-    if(cmd=="stop")
+    else if(cmd=="stop")
        ld.stop(opt.n)
+    else if(cmd=="status")
+       ld.status(opt.n)
+    else {
+        println "Invalid command"
+        cli.usage()
+        return
+    }
+
   }
 
  public boolean install(openesphome, scriptname, javahome, memory) {
@@ -310,7 +332,7 @@ public class Linuxdaemon extends CtlBase {
                           if(memory && line.startsWith("-Xms"))
                                     javaOpts = javaOpts + "-Xms"+memory+"M -Xmx"+memory+"M \\\n"
                           else if(line.startsWith("-Dzkrun")) {
-                               line = line.replaceAll("+",",")
+                               line = line.replaceAll("\\+",",")
                                javaOpts = javaOpts + line + " \\\n"
                           }
                           else
@@ -360,5 +382,145 @@ public class Linuxdaemon extends CtlBase {
         println "Stopping " + scriptname
         def cmdStop = "/etc/init.d/" + scriptname + " stop"
         println cmdStop.execute().text
+ }
+ 
+   public boolean status(scriptname) {
+        println "Status for  " + scriptname
+        def cmdStatus = "/etc/init.d/" + scriptname + " status"
+        println cmdStatus.execute().text
+ }
+
+}
+public class Installrecords extends CtlBase {
+  public static void main(String[] args) {
+    def cli = new CliBuilder(usage: 'openespctl installrecords [--openesphome=<home>,--name=<scriptname>,--version=<version>] <add | remove>')
+    cli.o(longOpt:'openesphome', 'Openesp-home folder', args:1)
+    cli.n(longOpt:'name', 'script or service name', args:1)
+    cli.v(longOpt:'version', 'version', args:1)
+    cli.h(longOpt:'help', "Help")
+    def opt = cli.parse(args)
+    if(!opt) {
+      return
+    }
+    def xargs = opt.arguments()
+    if (xargs.size() < 1) {
+      println "Invalid command"
+      cli.usage()
+      return
+    }
+    def cmd = xargs[0]
+
+    Installrecords ir = new Installrecords()
+
+    if(opt.h) {
+     cli.usage()
+     return
+    }
+
+  if(cmd) {
+    if(!opt.o || !opt.n || !opt.v) {
+           println "Missing required option: -o, -n and -v are all required"
+           cli.usage()
+           return
+    }
+    switch (cmd) {
+           case "add":
+           ir.add(opt.o, opt.n, opt.v)
+           break
+  
+           case "remove":
+           ir.remove(opt.o, opt.n, opt.v)
+           break
+
+           default:
+           println "Unknown command."
+           cli.usage()
+           return
+    }
+  }
+  else {
+       println "Invalid command"
+           cli.usage()
+           return
+  }
+ }
+ 
+ public boolean isWindows() {
+   if (System.properties['os.name'].toLowerCase().contains('windows')) {
+    return true
+    } else {
+    return false
+    }
+ }
+
+ public boolean add(openesphome, name, version) {
+   println "Adding install record for location: " + openesphome + ", service name: " + name  + " and version: " + version
+
+   def file
+   def fileText
+   def newrec
+   def header = "date,version,location,service.name,init.script\n"
+
+   def format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss")
+   def datetime = format.format( new Date()  )
+
+   if (isWindows()) {
+      def dir = new File("C:\\ProgramData\\OpenESP").mkdir()
+      file = new File("C:\\ProgramData\\OpenESP\\openesp-installs.csv")
+      newrec = datetime + "," + version + "," + openesphome + "," + name + ",\n"
+    } else {
+      file = new File("/etc/openesp-installs.csv")
+      newrec = datetime + "," + version + "," + openesphome + ",,/etc/init.d/" + name + ",\n"
+    }
+
+     if(file.exists()) {
+       fileText = file.text
+       fileText = fileText +  newrec
+     }
+     else  {
+       fileText = header + newrec
+     }
+
+    file.write(fileText)
+ }
+
+ public boolean remove(openesphome, name, version) {
+   println "Removing install record for location: " + openesphome + ", service name: " + name  + " and version: " + version
+    
+    def file
+
+   if (isWindows()) {
+      def dir = new File("C:\\ProgramData\\OpenESP").mkdir()
+      file = new File("C:\\ProgramData\\OpenESP\\openesp-installs.csv")
+    } else {
+      file = new File("/etc/openesp-installs.csv")
+      name = "/etc/init.d/" + name
+    }
+
+     if(!file.exists()) {
+        println "Install records file DOES NOT exist !"
+        return
+     }
+
+    def newText=""
+    def found = false
+    openesphome = "," + openesphome + ","
+    name =  "," + name + ","
+    version = "," + version + ","
+
+    file.eachLine { line ->
+              if(!line.contains(openesphome) || !line.contains(name) || !line.contains(version))
+                 newText = newText + line +"\n"
+              else
+                 found=true
+    }
+    
+    if(found)   {
+             file.write(newText)
+             println "install record has been removed"
+    }
+    else
+        println "This record was not found, can not be removed !"
+
  }
 }
