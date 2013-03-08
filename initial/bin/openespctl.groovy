@@ -9,7 +9,7 @@ def openEspEnv = System.getenv().get("OPENESP_HOME")
 CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
 // List available commands
-commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'help']
+commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'installrecords', 'help']
 commands_win = ['service']
 commands_nonwin = ['daemon']
 is_windows = System.properties['os.name'].toLowerCase().contains('windows')
