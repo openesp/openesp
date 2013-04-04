@@ -73,7 +73,7 @@ From build directory:
     
 Windows:
 
-    build\openesp\bin\run.bat
+    build\openesp\bin\run.cmd
 
 From distribution zip:
 
@@ -85,7 +85,7 @@ Linux/OSX:
 Windows:
 
     jar xf openesp-x.y.zip
-    openesp\bin\run.bat
+    openesp\bin\run.cmd
 
 Now you can visit OpenESP's admin screen at http://localhost:18080/
 
