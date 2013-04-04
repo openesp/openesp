@@ -1,0 +1,27 @@
+<langpack>
+
+<str id="custom.title" txt="Select pre-existing solr configuration"/>
+<str id="custom.ziplocation" txt="Custom Solr config zip location"/>
+<str id="custom.destination" txt="Custom Solr config destination"/>
+<str id="custom.use" txt="Use custom Solr configuration from zip file" />
+
+<str id="custom.overlay.title" txt="Custom overlay for Tomcat"/>
+<str id="custom.overlay.ziplocation" txt="Custom overlay zip location"/>
+<str id="custom.overlay.use" txt="Use custom overlay zip file"/>
+
+<str id="options.solr.home" txt="SOLR_HOME location" />
+<str id="options.solr.data" txt="Solr's data dir" />
+<str id="options.solr.log" txt="Solr's Log dir" />
+<str id="options.jvm.mem" txt="Max memory for Jvm (in Mb)"/>
+<str id="options.jvm.msg" txt="The max memory for JVM is  mandatory!"/>
+<str id="options.windows.service" txt="Check this box to START Windows service after install" />
+<str id="options.linux.service" txt="Check this box to START Linux service after install" />
+<str id="options.windows.service.name" txt="Windows service name" />
+<str id="options.linux.service.name" txt="Linux service name" />
+<str id="options.port.msg" txt="The port number mandatory!"/>
+<str id="options.sslport.msg" txt="The SSL port number mandatory!"/>
+<str id="options.cloud" txt="Enable Solr cloud"/>
+<str id="options.dzkrun" txt="Start local Zoo keeper"/>
+<str id="options.zkhost" txt="ZK host(s) (list of [host]:[port] with + separator)"/>
+<str id="options.zkhost.msg" txt="Invalid zkhost input! it should be in the form of list of [host]:[port] with + separator"/>
+</langpack>

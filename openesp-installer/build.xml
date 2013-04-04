@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project default="installer">
+    <property environment="env"/>
+    <property name="product.name" value="OpenESP"/>
+    <property name="product.version" value="${openEspVersion}"/> <!-- Set to same version as openesp -->
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="dist.dir" value="${build.dir}/dist"/>
+    <property name="dist.parent.dir" value="${basedir}/../build/distributions"/>
+    <property name="openesp.zipfile" value="${dist.parent.dir}/openesp-${product.version}.zip"/>
+    <property name="launch4j.dir" location="${env.LAUNCH4J_HOME}" />
+
+    <!-- Allows us to use the IzPack Ant task, standalone-compiler.jar added to Ant lib -->
+    <taskdef name="IzPack" classpath="${basedir}/lib/standalone-compiler.jar"
+        classname="com.izforge.izpack.ant.IzPackTask"/>
+
+    <taskdef name="launch4j"
+        classname="net.sf.launch4j.ant.Launch4jTask"
+        classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+                
+    <condition property="IZPACK_HOME" value="${env.IZPACK_HOME}" else="../IzPack">
+        <isset property="env.IZPACK_HOME"/>
+        </condition>
+        
+    <target name="javaCompile" depends="init">
+        <javac srcdir="src" destdir="${build.dir}/classes" includeantruntime="false"/>
+    </target>
+
+    <target name="jarUtil" depends="javaCompile">
+        <jar destfile="${build.dir}/utilOpenESP.jar"
+             basedir="${build.dir}/classes"
+             includes="*.class"
+             />
+    </target>
+    
+    <target name="prepareOpenESP">
+        <unzip src="${openesp.zipfile}" dest="${build.dir}"/>
+        <zip basedir="${build.dir}/openesp" destfile="${build.dir}/openesp.zip" />
+        <copy file="${openesp.zipfile}" todir="${build.dir}"/>
+    </target>
+    
+    <target name="IzpackCompile" depends="jarUtil,prepareOpenESP">
+        <echo message="Makes the jar installer using IzPack"/>
+        <IzPack input="${basedir}/openesp-install.xml"
+            output="${dist.dir}/openesp-install-${product.version}.jar"
+            installerType="standard"
+            basedir="${basedir}"/>
+    </target>
+        
+    <target name="installer" depends="IzpackCompile">
+        <echo message="Makes the exe installer"/>
+        <launch4j configFile="openesp-launch4j.xml" 
+            jarPath="${dist.dir}/openesp-install-${product.version}.jar" 
+            outfile="${dist.dir}/OpenESP-Setup-${product.version}.exe" />
+    </target>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+        
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>

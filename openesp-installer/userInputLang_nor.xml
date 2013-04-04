@@ -1,0 +1,15 @@
+<langpack>
+
+<str id="custom.title" txt="Velg skreddersydd Solr konfigurasjon"/>
+<str id="custom.ziplocation" txt="Skreddersydd Solr configurasjon zip plassering"/>
+<str id="custom.destination" txt="Skreddersydd Solr configurasjon destinasjon"/>
+<str id="custom.ignore" txt="Velg denne boksen for å IGNORERE skreddersydd Solr configurasjon" />
+
+<str id="options.solr.home" txt="SOLR_HOME plassering" />
+<str id="options.solr.data" txt="Solr's data mappe" />
+<str id="options.solr.log" txt="Solr's Log mappe" />
+<str id="options.jvm.mem" txt="Maksimum minne for Jvm (i Mb)"/>
+<str id="options.jvm.msg" txt="Maksimum minne for JVM er påkrevet!"/>
+<str id="options.start.service" txt="Velg denne boksen for å starte Windows tjenesten etter installering" />
+
+</langpack>

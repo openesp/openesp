@@ -159,3 +159,13 @@ task dist (dependsOn: 'doZip') {
     println "DONE"
   }
 }
+
+task installer (dependsOn: ['dist']) {
+  doLast {
+    copy {
+      from 'openesp-installer/build/dist'
+      into "build/distributions"
+    }
+    println 'Done building installer'
+  }
+}

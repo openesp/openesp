@@ -1,0 +1,34 @@
+<shortcuts>
+  <skipIfNotSupported/>
+  <programGroup defaultName="OpenESP"
+                location="startMenu"/>
+  <shortcut
+    name="Start OpenESP"
+    target="$INSTALL_PATH\tomcat\bin\startup.bat"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH\tomcat\bin"
+    programGroup="yes"
+    startMenu="yes">
+  </shortcut>
+  <shortcut name="Uninstall OpenESP"
+    target="$INSTALL_PATH\Uninstaller\uninstall.bat"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH\Uninstaller"
+    description="OpenESP uninstaller"
+    initialState="normal"
+    programGroup="yes"
+    startMenu="yes">
+  </shortcut>
+  <shortcut
+    name="OpenESP Admin Guide"
+    target="$INSTALL_PATH\doc\OpenESP admin guide.pdf"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH"
+    programGroup="yes"
+    startMenu="yes">
+  </shortcut>
+  <shortcut name="OpenESP Admin page" target="$INSTALL_PATH/openesp-admin.url"
+            workingDirectory="$INSTALL_PATH" description="OpenESP Admin page"
+            programGroup="yes" desktop="yes" applications="no" startMenu="yes">
+  </shortcut>          
+</shortcuts>

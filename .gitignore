@@ -3,7 +3,6 @@ tmp
 .gradle
 .metadata
 build
-openesp-installer
 *.odt#
 INBOX
 documentation/OpenESP admin guide.pdf

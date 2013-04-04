@@ -9,7 +9,7 @@ def openEspEnv = System.getenv().get("OPENESP_HOME")
 CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
 // List available commands
-commands = ['help', 'disable', 'enable', 'upgrade', 'port', 'installrecords', 'help']
+commands = ['help', 'disable', 'enable', 'port', 'installrecords']
 commands_win = ['service']
 commands_nonwin = ['daemon']
 is_windows = System.properties['os.name'].toLowerCase().contains('windows')
@@ -246,7 +246,7 @@ public class Upgrader extends CtlBase {
 public class Linuxdaemon extends CtlBase {
   public static void main(String[] args) {
     def cli = new CliBuilder(usage: 'openespctl daemon [--openesphome=<home>,--name=<scriptname>,--memory=<NNm>,--javahome=<java_home>] <install | uninstall | start | stop | status>')
-    cli.o(longOpt:'openesphome', 'Openesp-home folder', args:1)
+    cli.o(longOpt:'openesphome', 'OpenESP-home folder', args:1)
     cli.j(longOpt:'javahome', 'java_home location', args:1)
     cli.m(longOpt:'memory', 'JVM memory', args:1)
     cli.n(longOpt:'name', 'script name', args:1)
@@ -393,7 +393,7 @@ public class Linuxdaemon extends CtlBase {
 }
 public class Installrecords extends CtlBase {
   public static void main(String[] args) {
-    def cli = new CliBuilder(usage: 'openespctl installrecords [--openesphome=<home>,--name=<scriptname>,--version=<version>] <add | remove>')
+    def cli = new CliBuilder(usage: 'openespctl installrecords [options] <add | remove>')
     cli.o(longOpt:'openesphome', 'Openesp-home folder', args:1)
     cli.n(longOpt:'name', 'script or service name', args:1)
     cli.v(longOpt:'version', 'version', args:1)

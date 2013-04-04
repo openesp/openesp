@@ -44,9 +44,34 @@ Alternatively, if you have Gradle already, simply run
 
     gradle
 
-You'll then get the distro in build/distributions/openesp-x.y.zip
+By default this will generate the zip distribution file:
 
-**NOTE:** The currente source will not build the installer, only the zip distro. So if you require an installer, please use one of the downloads above.
+* build/distributions/openesp-x.y.zip
+
+If you'd also like to build the installer, then run
+
+    gradle installer
+    
+You will get two more files in the distributions folder:
+
+* build/distributions/openesp-install-x.y.jar (multi platform installer)
+* build/distributions/OpenESP-Setup-x.y.exe (executable windows installer)
+
+### Prerequisites for building the installer
+
+The installer generation depends on IzPack and Launch4J, which must be installed separately. You need:
+
+*   IzPack 4.x installed, and IZPACK_HOME variable set (http://izpack.org/)
+*   Launch4J for your platform and LAUNCH4J_HOME variable set (http://launch4j.sourceforge.net/)
+
+For MacOS the you need at least Launch4J 3.1.0 or later, to support Intel Macs.
+
+If you want to user older version, MinGW tools are too old for Intel processors. Try these commands to install (assuming [MacPorts](http://www.macports.org/)):
+
+    sudo port install launch4j i386-mingw32-binutils i386-mingw32-w32api
+    sudo cp /opt/local/bin/i386-mingw32-windres /opt/local/share/launch4j/bin/windres 
+    sudo cp /opt/local/bin/i386-mingw32-ld /opt/local/share/launch4j/bin/ld
+    export LAUNCH4J_HOME=/opt/local/share/launch4j
 
 ## Running
 From build directory:
@@ -71,7 +96,7 @@ Windows:
 
 Now you can visit OpenESP's admin screen at http://localhost:18080/
 
-If you downloaded the installer you will also be able to install as a service on Windows or Linux and then run in the background.
+If you installed using the intaller, you got the option to install a service (Windows) or a daemon (Linux). To start/stop OpenESP, simply start or stop the service/daemon like you normally do on your platform.
 
 ## The openespctl script
 After install, you may want to do certain tasks, and there is a script called openespctl available for certain common tasks. Type ```./bin/openespctl help``` for a usage explanation.
@@ -113,6 +138,7 @@ openesp
   ├── documentation        : for developing user documentation. PDF should be placed in initial/doc
   ├── openesp-solr         : Sub project for building (or downloading) Apache Solr
   ├── openesp-mcf          : Sub project for building (or downloading) Apache MCF
+  ├── openesp-installer    : Sub project for building the installer
   ├── build.gradle         : The makefile for gradle
   ├── gradle.properties    : Specify global properties here, such as versions for Solr, Tomcat etc
   └── build                : After running gradle, the release artifacts are generated here
@@ -122,8 +148,8 @@ openesp
 Please check the [issue tracker](https://github.com/openesp/openesp/issues) for bugs and future plans.
 The next major features planned include
 
-* Installer
 * SSL security
+* Search frontend
 
 ## Engage with the community
 If you use the product, please engage with the community

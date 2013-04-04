@@ -1,0 +1,10 @@
+<processing>
+<logfiledir>$INSTALL_PATH/.temp</logfiledir>
+  <job name="OpenESP admin page">
+    <os family="windows" />
+    <executefile name="$INSTALL_PATH/.temp/install/openAdminPage.bat">
+    </executefile>
+  </job>
+  <onFail previous="false" next="true" />
+  <onSuccess previous="false" next="true"/>
+</processing>

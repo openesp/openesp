@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<installation version="1.0">
+    <info>
+        <appname>OpenESP</appname>
+        <appversion>0.3</appversion>
+        <authors>
+            <author email="openesp@openesp.org" name="OpenESP community"/>
+        </authors>
+        <url>http://www.openesp.org/</url>
+        <uninstaller name="Uninstaller.jar" write="yes"/>
+        <javaversion>1.6.0</javaversion>
+        <requiresjdk>no</requiresjdk>
+        <writeinstallationinformation>yes</writeinstallationinformation>
+        <run-privileged condition="izpack.windowsinstall"/>
+    </info>
+
+    <installerrequirements>
+<!--        <installerrequirement condition="izpack.windowsinstall|izpack.linuxinstall" message="This installer could only be run on Windows or Linux operating systems."/>
+-->
+<!--        <installerrequirement condition="arch64" message="This installer needs a 64bit OS and a 64bit JVM"/>-->
+    </installerrequirements>
+
+    <conditions>
+
+        <condition type="variable" id="CustomSolrCheckBoxEnabled">
+            <name>solr.custom.check</name>
+            <value>true</value>
+        </condition>
+
+        <condition type="variable" id="NotCustomSolrCheckBoxEnabled">
+            <name>solr.custom.check</name>
+            <value>false</value>
+        </condition>
+
+        <condition type="packselection" id="WindowsServicePackIsSelected">
+            <packid>WindowsService</packid>
+        </condition>
+
+        <condition type="packselection" id="LinuxServicePackIsSelected">
+            <packid>LinuxService</packid>
+        </condition>
+
+        <condition type="packselection" id="ManifoldCFPackIsSelected">
+            <packid>packManifoldCF</packid>
+        </condition>
+
+        <condition type="packselection" id="SolrPackIsSelected">
+            <packid>packSolrSearchEngine</packid>
+        </condition>
+
+        <condition type="not" id="SolrPackIsNotSelected">
+            <condition type="ref" refid="SolrPackIsSelected"/>
+        </condition>
+
+        <condition type="not" id="ManifoldCFPackIsNotSelected">
+            <condition type="ref" refid="ManifoldCFPackIsSelected"/>
+        </condition>
+
+        <condition type="not" id="WindowsServicePackIsNotSelected">
+            <condition type="ref" refid="WindowsServicePackIsSelected"/>
+        </condition>
+
+        <condition type="not" id="LinuxServicePackIsNotSelected">
+            <condition type="ref" refid="LinuxServicePackIsSelected"/>
+        </condition>
+
+        <condition type="and" id="ServicePackIsNotSelected">
+            <condition type="ref" refid="LinuxServicePackIsNotSelected"/>
+            <condition type="ref" refid="WindowsServicePackIsNotSelected"/>
+        </condition>
+
+        <condition type="java" id="checkSolrConfig">
+            <java>
+                <class>TestSolrConfig</class>
+                <field>customSolrConfig</field>
+            </java>
+            <returnvalue type="boolean">true</returnvalue>
+        </condition>
+        <condition type="java" id="checkOverlay">
+            <java>
+                <class>TestOverlay</class>
+                <field>customOverlay</field>
+            </java>
+            <returnvalue type="boolean">true</returnvalue>
+        </condition>
+        <condition type="variable" id="SolrCloudEnabled">
+            <name>solr.cloud</name>
+            <value>true</value>
+        </condition>
+        <condition type="variable" id="StartService">
+            <name>solr.start.service</name>
+            <value>true</value>
+        </condition>
+        <condition type="variable" id="arch64">
+                   <name>SYSTEM_sun_arch_data_model</name>
+                   <value>64</value>
+        </condition>
+        <condition type="variable" id="doOverlay">
+            <name>solr.overlay.check</name>
+            <value>true</value>
+        </condition>
+        <condition type="variable" id="doSolrConfig">
+            <name>solr.custom.check</name>
+            <value>true</value>
+        </condition>
+    </conditions>
+
+    <dynamicvariables>
+        <variable name="openesp.service.name" value="undefined" condition="ServicePackIsNotSelected"/>
+        <variable name="solr.custom.check" value="false" condition="!checkSolrConfig"/>
+        <variable name="solr.custom.check" value="true" condition="checkSolrConfig"/>
+        <variable name="solr.overlay.check" value="false" condition="!checkOverlay"/>
+        <variable name="solr.overlay.check" value="true" condition="checkOverlay"/>
+        <variable name="customSolrConfig" value="${SYSTEM_user_dir}${FILE_SEPARATOR}solr-config.zip" condition="checkSolrConfig"/>
+        <variable name="customSolrConfig" value="" condition="!checkSolrConfig"/>
+        <variable name="customOverlay" value="${SYSTEM_user_dir}${FILE_SEPARATOR}openesp-overlay.zip" condition="checkOverlay"/>
+        <variable name="customOverlay" value="" condition="!checkOverlay"/>
+        <variable name="solrHome" value="${INSTALL_PATH}${FILE_SEPARATOR}conf${FILE_SEPARATOR}solr"/>
+        <variable name="solrCustom" value="${INSTALL_PATH}${FILE_SEPARATOR}conf${FILE_SEPARATOR}solr-custom"/>
+        <variable name="solrCloudJvm" value="-Dzkrun -DzkHost=$solr.dzkhost" condition="SolrCloudEnabled"/>
+        <variable name="solrCloudJvm" value="" condition="!SolrCloudEnabled"/>
+    </dynamicvariables>
+    <guiprefs height="560" resizable="no" width="720">
+        <modifier key="useFlags" value="yes"/>
+        <modifier key="langDisplayType" value="default"/>
+    </guiprefs>
+    <locale>
+        <langpack iso3="eng"/>
+        <!-- TODO: Norwegian translation <langpack iso3="nor"/> -->
+        <!-- TODO: Swedish translation <langpack iso3="swe"/> -->
+    </locale>
+    <resources>
+        <res id="userInputSpec.xml" src="userInputSpec.xml"/>
+        <res id="userInputLang.xml_eng" src="userInputLang_eng.xml"/>
+        <res id="userInputLang.xml_nor" src="userInputLang_nor.xml"/>
+        <res id="LicencePanel.licence" src="LICENSE.txt"/>
+        <res id="InfoPanel.info" src="Readme.txt"/>
+        <res id="InfoPanel.info_nor" src="Readme_nor.txt"/>
+        <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
+        <res id="ProcessPanel.Spec.xml" src="processPanel.Spec.xml" />
+    </resources>
+    <panels>
+        <panel classname="CheckedHelloPanel">
+                <os family="windows"/>
+        </panel>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="UserInputPanel" id="UserInputPanel.0">
+               <help iso3="eng" src="CustomOverlayPanelHelp_eng.html"/>
+        </panel>
+        <panel classname="UserInputPanel" id="UserInputPanel.1" condition="SolrPackIsSelected">
+               <help iso3="eng" src="CustomConfigPanelHelp_eng.html"/>
+            <help iso3="nor" src="CustomConfigPanelHelp_nor.html"/>
+        </panel>
+        <panel classname="UserInputPanel" id="UserInputPanel.2" condition="SolrPackIsSelected+SolrCloudEnabled"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel" id="shortcutpanel">
+               <os family="windows"/>
+        </panel>
+        
+        <panel classname="ProcessPanel"  condition="StartService+WindowsServicePackIsSelected"/>
+
+        <panel classname="FinishPanel"/>
+
+
+
+    </panels>
+
+    <packs>
+
+        <pack name="OpenESP Framework" preselected="yes" required="yes" >
+            <description>Installs the OpenESP framework with Tomcat application server and an admin application
+            </description>
+            <file override="update" src="build/openesp.zip" targetdir="$INSTALL_PATH/" unpack="true" />
+            <file src="uninstall.bat" targetdir="$INSTALL_PATH/Uninstaller"/>
+            <file src="install" targetdir="$INSTALL_PATH/.temp"/>
+            <file src="install/delService.bat" targetdir="$INSTALL_PATH/bin"/>
+            <file src="install/delInstallRecord.bat" targetdir="$INSTALL_PATH/bin"/>            
+            <file src="install/delService.sh" targetdir="$INSTALL_PATH/bin"/>
+            <file src="install/delInstallRecord.sh" targetdir="$INSTALL_PATH/bin"/>
+            <file src="install/linuxInstallService.sh" targetdir="$INSTALL_PATH/bin"/>
+            <file src="install/linuxInstallRecord.sh" targetdir="$INSTALL_PATH/bin"/>
+            <file src="build/utilOpenESP.jar" targetdir="$INSTALL_PATH/.temp"/>
+            <file src="openesp.sh" targetdir="$INSTALL_PATH" condition="izpack.linuxinstall"/>
+            <file src="openesp-admin.url" targetdir="$INSTALL_PATH" override="true"/>
+
+            <parsable targetfile="$INSTALL_PATH/bin/delService.bat"/>
+            <parsable targetfile="$INSTALL_PATH/bin/delInstallRecord.bat"/>
+            <parsable targetfile="$INSTALL_PATH/bin/delInstallRecord.sh"  os="unix" condition="izpack.linuxinstall"/>
+            <parsable targetfile="$INSTALL_PATH/bin/linuxInstallRecord.sh"  os="unix" condition="izpack.linuxinstall"/>
+
+            <parsable targetfile="$INSTALL_PATH/openesp-admin.url"/>
+            <parsable targetfile="$INSTALL_PATH/.temp/install/java_opts.properties"/>
+
+            <parsable targetfile="$INSTALL_PATH/openesp.sh" os="unix" condition="izpack.linuxinstall"/>
+            <executable targetfile="$INSTALL_PATH/openesp.sh" stage="never" keep="true" condition="izpack.linuxinstall"/>
+            
+            <parsable targetfile="$INSTALL_PATH/.temp/install/linuxUtil.sh" os="unix" condition="izpack.linuxinstall"/>
+            <executable targetfile="$INSTALL_PATH/.temp/install/linuxUtil.sh" stage="never" keep="true" condition="izpack.linuxinstall"/>
+
+            <executable targetfile="$INSTALL_PATH/.temp/install/unpackLinux.sh" stage="never" keep="true" condition="izpack.linuxinstall"/>
+
+
+             <executable targetfile="$INSTALL_PATH/.temp/install/linuxUtil.sh" stage="postinstall" keep="true" condition="izpack.linuxinstall"/>
+
+             <executable targetfile="$INSTALL_PATH/bin/openespctl" stage="never" keep="true" condition="izpack.linuxinstall"/>
+
+            <executable targetfile="$INSTALL_PATH/.temp/install/unpackOverlay.bat" stage="postinstall" keep="true" condition="izpack.windowsinstall+doOverlay">
+                <os family="windows"/>
+                <args>
+                    <arg value="$INSTALL_PATH\.temp\install"/>
+                    <arg value="${solr.overlay.zip}"/>
+                    <arg value="$INSTALL_PATH"/>
+                </args>
+            </executable>
+            
+
+            <executable targetfile="$INSTALL_PATH/.temp/install/unpackLinux.sh" stage="postinstall" keep="true" condition="izpack.linuxinstall+doOverlay" os="unix">
+                 <os family="unix"/>
+                 <args>
+                    <arg value="${solr.overlay.zip}"/>
+                    <arg value="$INSTALL_PATH"/>
+                </args>
+            </executable>
+
+
+            <executable targetfile="$INSTALL_PATH/.temp/utilOpenESP.jar" class="PortReplace" type="jar" keep="true" stage="postinstall">
+                   <args>
+                   <arg value="$INSTALL_PATH/tomcat/conf/server.xml"/>
+                   <arg value="${solr.port.number}"/>
+                   <arg value="${solr.sslport.number}"/>
+                   </args>
+            </executable>
+
+             <executable targetfile="$INSTALL_PATH/bin/openespctl.bat"   stage="postinstall" keep="true" condition="ManifoldCFPackIsNotSelected+izpack.windowsinstall">
+             <os family="windows"/>
+             <args>
+                   <arg value="disable"/>
+                   <arg value="mcf"/>
+             </args>
+             </executable>
+
+             <executable targetfile="$INSTALL_PATH/bin/openespctl"   stage="postinstall" keep="true" condition="ManifoldCFPackIsNotSelected+izpack.linuxinstall">
+             <os family="unix"/>
+             <args>
+                   <arg value="disable"/>
+                   <arg value="mcf"/>
+             </args>
+             </executable>
+             
+             <executable targetfile="$INSTALL_PATH/bin/openespctl.bat"   stage="postinstall" keep="true" condition="SolrPackIsNotSelected+izpack.windowsinstall">
+             <os family="windows"/>
+             <args>
+                   <arg value="disable"/>
+                   <arg value="solr"/>
+             </args>
+             </executable>
+
+             <executable targetfile="$INSTALL_PATH/bin/openespctl"   stage="postinstall" keep="true" condition="SolrPackIsNotSelected+izpack.linuxinstall">
+             <os family="unix"/>
+             <args>
+                   <arg value="disable"/>
+                   <arg value="solr"/>
+             </args>
+             </executable>
+             
+             <executable targetfile="$INSTALL_PATH/bin/openespctl.bat"   stage="postinstall" keep="true" condition="izpack.windowsinstall">
+             <os family="windows"/>
+             <args>
+                   <arg value="installrecords"/>
+                   <arg value="-n"/>
+                   <arg value="${openesp.service.name}"/>
+                   <arg value="-o"/>
+                   <arg value="$INSTALL_PATH"/>
+                   <arg value="-v"/>
+                   <arg value="$APP_VER"/>
+                   <arg value="add"/>
+             </args>
+             </executable>
+
+             <executable targetfile="$INSTALL_PATH/bin/linuxInstallRecord.sh"   stage="postinstall" keep="true" condition="izpack.linuxinstall">
+             <os family="unix"/>
+             </executable>
+
+             <executable targetfile="$INSTALL_PATH/bin/delInstallRecord.sh"   stage="uninstall" keep="true" condition="izpack.linuxinstall">
+             <os family="unix"/>
+             </executable>
+
+             <executable targetfile="$INSTALL_PATH/bin/delInstallRecord.bat"   stage="uninstall" keep="true" condition="izpack.windowsinstall">
+             <os family="windows"/>
+             </executable>
+
+        </pack>
+        
+       <pack name="ManifoldCF" preselected="yes" required="no" id="packManifoldCF">
+            <description>ManifoldCF is a connector framework that lets you do web crawling, file system crawling, DB connections, index Sharepoint and other services. It also adds document-level security.
+                
+The application will always be installed, but if you uncheck this, it will be disabled and not run when Tomcat starts. ManifoldCF can easily be re-enabled later using the openespctl utility.
+            </description>
+
+        </pack>
+
+       <pack name="Solr Search Engine" preselected="yes" required="no" id="packSolrSearchEngine">
+            <description>Apache Solr is the main search engine component in OpenESP.
+                
+The application will always be installed, but if you uncheck this, it will be disabled and not run when Tomcat starts. Solr can easily be re-enabled later using the openespctl utility.
+            </description>
+            <executable targetfile="$INSTALL_PATH/.temp/install/unpackConfig.bat" stage="postinstall" keep="true" condition="izpack.windowsinstall+doSolrConfig">
+                 <os family="windows"/>
+                     <args>
+                    <arg value="$INSTALL_PATH\.temp\install"/>
+                    <arg value="${solr.config.zip}"/>
+                    <arg value="${solr.solr.home}"/>
+                </args>
+            </executable>
+            
+            <executable targetfile="$INSTALL_PATH/.temp/install/unpackLinux.sh" stage="postinstall" keep="true" condition="izpack.linuxinstall+doSolrConfig">
+                 <os family="unix"/>
+                     <args>
+                    <arg value="${solr.config.zip}"/>
+                    <arg value="${solr.solr.home}"/>
+                </args>
+            </executable>
+
+        </pack>
+
+
+        <pack name="Windows service" preselected="yes" required="no" id="WindowsService" condition="izpack.windowsinstall">
+        <os family="windows"/>
+            <description>Installs a Windows service which starts OpenESP automatically when computer starts</description>
+            
+            <parsable targetfile="$INSTALL_PATH/.temp/install/openAdminPage.bat"/>
+            <parsable targetfile="$INSTALL_PATH/bin/delService.bat"/>
+
+            <executable targetfile="$INSTALL_PATH/bin/install-windows-service.bat" stage="postinstall" keep="true" condition="WindowsServicePackIsSelected">
+                <args>
+                    <arg value="-jm"/>
+                    <arg value="${solr.jvm.mem}"/>
+                     <arg value="-p"/>
+                    <arg value="$INSTALL_PATH"/>
+                     <arg value="-sh"/>
+                    <arg value="${solr.solr.home}"/>
+                     <arg value="-sd"/>
+                    <arg value="${solr.data.dir}"/>
+                     <arg value="-sl"/>
+                    <arg value="${solr.log.dir}"/>
+                     <arg value="-ss"/>
+                    <arg value="${solr.start.service}"/>
+                     <arg value="-jh"/>
+                    <arg value="$JAVA_HOME"/>
+                     <arg value="-s"/>
+                    <arg value="${openesp.service.name}"/>
+                     <arg value="-sc"/>
+                    <arg value="${solr.cloud}"/>
+                     <arg value="-zr"/>
+                    <arg value="${solr.dzkrun}"/>
+                     <arg value="-zh"/>
+                    <arg value="${solr.dzkhost}"/>
+
+                </args>
+            </executable>
+
+
+
+            <executable targetfile="$INSTALL_PATH/bin/delService.bat" stage="uninstall" keep="true" condition="WindowsServicePackIsSelected">
+
+            </executable>
+
+        </pack>
+
+
+        <pack name="Install Linux service" preselected="yes" required="no" id="LinuxService" condition="izpack.linuxinstall">
+        <os family="unix"/>
+            <description>Installs a Linux daemon which starts OpenESP automatically when computer starts</description>
+
+            <parsable targetfile="$INSTALL_PATH/bin/delService.sh"/>
+            <parsable targetfile="$INSTALL_PATH/bin/linuxInstallService.sh"/>
+
+            <executable targetfile="$INSTALL_PATH/bin/openespctl" stage="never" keep="true"/>
+
+            <executable targetfile="$INSTALL_PATH/bin/linuxInstallService.sh" stage="postinstall" keep="true"/>
+
+            <executable targetfile="$INSTALL_PATH/bin/delService.sh" stage="uninstall" keep="true" condition="LinuxServicePackIsSelected">
+   
+            </executable>
+
+        </pack>
+    </packs>
+    
+
+    <jar src="build/utilOpenESP.jar" stage="both"/>
+    <listeners>
+        <listener installer="RegistryInstallerListener" uninstaller="RegistryUninstallerListener">
+            <os family="windows"/>
+        </listener>
+    </listeners>
+    <native type="3rdparty" name="COIOSHelper.dll" stage="both">
+        <os family="windows"/>
+    </native>
+    <native type="3rdparty" name="COIOSHelper_x64.dll" stage="both">
+        <os family="windows"/>
+    </native>
+    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
+</installation>

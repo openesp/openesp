@@ -1,0 +1,2 @@
+ant.properties.openEspVersion = openEspVersion
+ant.importBuild 'build.xml'
