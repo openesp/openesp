@@ -13,5 +13,5 @@ SET CATALINA_OPTS=-Xms512m -Xmx1024m -Dsolr.solr.home=%SOLR_HOME% -Dopenesp.home
 REM -Djava.util.logging.config.file=%OPENESP_HOME%\conf\solr\logging.properties
 echo CATALINA_OPTS is %CATALINA_OPTS%
 
-cd %OPENESP%\tomcat\bin
+cd %OPENESP_HOME%\tomcat\bin
 catalina.bat run
