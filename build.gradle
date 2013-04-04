@@ -156,16 +156,16 @@ task wrapper(type: Wrapper) {
 
 task dist (dependsOn: 'doZip') {
   doLast {
-    println "DONE"
+    println "Done generating zip distro, please check build/distributions"
   }
 }
 
-task installer (dependsOn: ['dist']) {
+task installer (dependsOn: ['dist', 'openesp-installer:installer']) {
   doLast {
     copy {
       from 'openesp-installer/build/dist'
       into "build/distributions"
     }
-    println 'Done building installer'
+    println 'Done generating jar and exe installers, please check build/distributions'
   }
 }
