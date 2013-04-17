@@ -18,7 +18,7 @@ We very much welcome bug reports and [pull requests](https://help.github.com/art
 The project does not currently provide binary distribution. Please build from source.
 
 ## Building
-If you prefer to build the product from source or hack yourself, please first download the source distribution
+To build the product from source, please first download the source distribution
 
 * Click the "ZIP" icon to download a source distribution ZIP file snapshot
 * Or clone the Git repo using command ```git clone https://github.com/openesp/openesp.git```
