@@ -24,10 +24,10 @@ export CATALINA_OPTS="-server \
                      -Dsolr.solr.home=$SOLR_HOME \
                      -Dopenesp.home=$OPENESP_HOME \
                      -Dsolr.data.dir=$SOLR_DATA_DIR \
+                     -Dlog4j.debug=true \
+                     -Dlog4j.configuration=file://$OPENESP_HOME/conf/solr/log4j.properties \
                      -Dorg.apache.manifoldcf.configfile=$OPENESP_HOME/conf/mcf/properties.xml"
 echo CATALINA_OPTS is $CATALINA_OPTS
-
-# -Djava.util.logging.config.file=$OPENESP_HOME/conf/solr/logging.properties
 
 pushd $OPENESP_HOME/tomcat/bin
 sh ./catalina.sh run

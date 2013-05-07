@@ -92,6 +92,11 @@ task organizeForOpenESP (dependsOn: 'unpackSolr') {
 			from "${unzippedPath}/example/exampledocs/post.jar"
 			into "${deployDir}/bin"
 		}
+		// Issue #29, upgrade to Solr 4.3 - need slf4j and log4j init
+		copy {
+			from "${unzippedPath}/example/lib/ext"
+			into "${deployDir}/tomcat/lib/logging"
+		}
 		new File("${deployDir}/logs/solr").mkdirs()
 	}
 }
