@@ -21,17 +21,18 @@
         </field>
 
         <field type="space" />
-        	<field type="check" variable="solr.overlay.check" align="right">
+       	<field type="check" variable="solr.overlay.check" align="right" conditionid="!checkOverlay">
          	<spec txt="Use custom overlay zip file" id="custom.overlay.use" revalidate="yes" true="true" false="false" set="${solr.overlay.check}"/>
-        	</field>
-
+       	</field>
+       	<field type="check" variable="solr.overlay.check" align="right" conditionid="checkOverlay">
+         	<spec txt="Ignore custom overlay zip file"  revalidate="yes" true="true" false="false" set="${solr.overlay.check}"/>
+       	</field>
         <field type="space" />
 
         <field align="left" txt="Custom overlay zip location" type="staticText" id="custom.overlay.ziplocation" conditionid="doOverlay"/>
         <field align="left" type="file" variable="solr.overlay.zip" conditionid="doOverlay">
             <spec set="$customOverlay" size="40" txt=""/>
         </field>
-
 
         <field type="space" />
          <field type="space" />
@@ -55,8 +56,6 @@
  	<spec txt="Check this box to START Linux service after install" id="options.linux.service" true="true" false="false" set="true"/>
 	</field>
 
-
-        
          </panel>
 
 

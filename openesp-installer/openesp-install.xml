@@ -95,9 +95,27 @@
                    <name>SYSTEM_sun_arch_data_model</name>
                    <value>64</value>
         </condition>
-        <condition type="variable" id="doOverlay">
+        <condition type="variable" id="checkBoxOverlay">
             <name>solr.overlay.check</name>
             <value>true</value>
+        </condition>
+        <condition type="not" id="NotCheckBoxOverlay">
+                   <condition type="ref" refid="checkBoxOverlay"/>
+        </condition>
+        <condition type="not" id="NotCheckOverlay">
+            <condition type="ref" refid="checkOverlay"/>
+        </condition>
+        <condition type="and" id="doOverlay1">
+            <condition type="ref" refid="checkOverlay"/>
+            <condition type="ref" refid="NotCheckBoxOverlay"/>
+        </condition>
+        <condition type="and" id="doOverlay2">
+            <condition type="ref" refid="NotCheckOverlay"/>
+            <condition type="ref" refid="checkBoxOverlay"/>
+        </condition>
+        <condition type="or" id="doOverlay">
+            <condition type="ref" refid="doOverlay1"/>
+            <condition type="ref" refid="doOverlay2"/>
         </condition>
         <condition type="variable" id="doSolrConfig">
             <name>solr.custom.check</name>
@@ -105,12 +123,12 @@
         </condition>
     </conditions>
 
+
+
     <dynamicvariables>
         <variable name="openesp.service.name" value="undefined" condition="ServicePackIsNotSelected"/>
         <variable name="solr.custom.check" value="false" condition="!checkSolrConfig"/>
         <variable name="solr.custom.check" value="true" condition="checkSolrConfig"/>
-        <variable name="solr.overlay.check" value="false" condition="!checkOverlay"/>
-        <variable name="solr.overlay.check" value="true" condition="checkOverlay"/>
         <variable name="customSolrConfig" value="${SYSTEM_user_dir}${FILE_SEPARATOR}solr-config.zip" condition="checkSolrConfig"/>
         <variable name="customSolrConfig" value="" condition="!checkSolrConfig"/>
         <variable name="customOverlay" value="${SYSTEM_user_dir}${FILE_SEPARATOR}openesp-overlay.zip" condition="checkOverlay"/>
