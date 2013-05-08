@@ -12,6 +12,7 @@ OPENESP_HOME=$BASEDIR/..
 echo "Starting OpenESP (OPENESP_HOME=$OPENESP_HOME)"
 SOLR_HOME=$OPENESP_HOME/conf/solr
 SOLR_DATA_DIR=$OPENESP_HOME/data/solr
+SOLR_LOG_DIR=$OPENESP_HOME/logs/solr
 export CATALINA_OPTS="-server \
                      -verbose:gc \
                      -XX:+UseConcMarkSweepGC \
@@ -24,6 +25,7 @@ export CATALINA_OPTS="-server \
                      -Dsolr.solr.home=$SOLR_HOME \
                      -Dopenesp.home=$OPENESP_HOME \
                      -Dsolr.data.dir=$SOLR_DATA_DIR \
+                     -Dsolr.log.dir=$SOLR_LOG_DIR \
                      -Dlog4j.debug=true \
                      -Dlog4j.configuration=file://$OPENESP_HOME/conf/solr/log4j.properties \
                      -Dorg.apache.manifoldcf.configfile=$OPENESP_HOME/conf/mcf/properties.xml"
