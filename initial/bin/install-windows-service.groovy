@@ -105,8 +105,8 @@ commonOpts = ["-Dcatalina.base=${tomcatPath}",
               "-Dlog4j.debug=true"
               ]
 
-if (solrCloud) {
-  if (dzkrun) zkOpts.add('-DzkRun')
+if (solrCloud == "true") {
+  if (dzkrun == "true") zkOpts.add('-DzkRun')
   if (dzkhost) zkOpts.add("-DzkHost=${dzkhost}")
 }
 
