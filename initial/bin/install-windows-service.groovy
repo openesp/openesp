@@ -90,7 +90,7 @@ file.eachLine { line ->
 solrOpts =   ["-Dsolr.solr.home=${solrHome}",
               "-Dsolr.data.dir=${solrDataDir}",
               "-Dsolr.log.dir=${solrLogDir}",
-              "-Dlog4j.configuration=file://$solrHome/log4j.properties"
+              "-Dlog4j.configuration=file:///$solrHome/log4j.properties"
               ]
 
 mcfOpts =    ["-Dorg.apache.manifoldcf.configfile=${mcfConf}"]
