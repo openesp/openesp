@@ -1,4 +1,11 @@
 if (gradle.startParameter.taskNames.contains('installer')) {
   ant.properties.openEspVersion = openEspVersion
   ant.importBuild 'build.xml'
+} else {
+  task clean { 
+    doLast {
+      println "Cleaning temp files"
+      delete 'build'
+    }
+  }
 }

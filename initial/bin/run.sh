@@ -27,7 +27,7 @@ export CATALINA_OPTS="-server \
                      -Dsolr.data.dir=$SOLR_DATA_DIR \
                      -Dsolr.log.dir=$SOLR_LOG_DIR \
                      -Dlog4j.debug=true \
-                     -Dlog4j.configuration=file://$OPENESP_HOME/conf/solr/log4j.properties \
+                     -Dlog4j.configuration=file:///$OPENESP_HOME/conf/solr/log4j.properties \
                      -Dorg.apache.manifoldcf.configfile=$OPENESP_HOME/conf/mcf/properties.xml"
 echo CATALINA_OPTS is $CATALINA_OPTS
 
