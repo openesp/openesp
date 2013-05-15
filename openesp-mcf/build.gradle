@@ -1,9 +1,7 @@
 // Build file for MCF as part of OpenESP
 def fullName = "apache-manifoldcf-${mcfVersion}"
 def zipName = "${fullName}-bin.zip"
-//def binUrl = "http://apache.uib.no/manifoldcf/${zipName}"
-// Temp workaround using patched version (see https://issues.apache.org/jira/browse/CONNECTORS-648)
-def binUrl = "https://dl.dropbox.com/u/20080302/apache-manifoldcf-1.1.1-bin.zip"
+def binUrl = "http://apache.uib.no/manifoldcf/${zipName}"
 def buildDir = 'build'
 def zipPath = "${tmpDir}/${zipName}"
 def unzippedPath = "${buildDir}/${fullName}"
