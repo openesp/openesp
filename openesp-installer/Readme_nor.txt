@@ -6,7 +6,7 @@ Produktet inkluderer:
 * ManifoldCF 1
 * OpenESP adminisjons-app
 
-MERK: Installeringsprogrammet og OpenESP krever 64-bit versjon av Java.
+MERK: Vi anbefaler 64-bits operativsystem og Java
 
 Produktet er distribuert som fri programvare under Apache Software License.
 Les mer på http://www.openesp.org/

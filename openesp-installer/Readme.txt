@@ -6,7 +6,7 @@ The product includes:
 * ManifoldCF 1
 * OpenESP administration page
 
-NOTE: The installer and OpenESP requires a 64-bit version of Java.
+NOTE: We recommend 64 bit OS and Java
 
 The product is open source, released under the Apache Software License.
 Read more at http://www.openesp.org/

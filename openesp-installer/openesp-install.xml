@@ -2,7 +2,7 @@
 <installation version="1.0">
     <info>
         <appname>OpenESP</appname>
-        <appversion>${openEspVersion}</appversion>
+        <appversion>Search Server</appversion> <!--Does not support variable replace here-->
         <authors>
             <author email="openesp@openesp.org" name="OpenESP community"/>
         </authors>
@@ -158,9 +158,7 @@
         <res id="ProcessPanel.Spec.xml" src="processPanel.Spec.xml" />
     </resources>
     <panels>
-        <panel classname="CheckedHelloPanel">
-                <os family="windows"/>
-        </panel>
+        <panel classname="CheckedHelloPanel"/>
         <panel classname="InfoPanel"/>
         <panel classname="LicencePanel"/>
         <panel classname="PacksPanel"/>
