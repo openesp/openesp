@@ -199,7 +199,6 @@
             <file src="install/linuxInstallService.sh" targetdir="$INSTALL_PATH/bin"/>
             <file src="install/linuxInstallRecord.sh" targetdir="$INSTALL_PATH/bin"/>
             <file src="build/utilOpenESP.jar" targetdir="$INSTALL_PATH/.temp"/>
-            <file src="openesp.sh" targetdir="$INSTALL_PATH" condition="izpack.linuxinstall"/>
             <file src="openesp-admin.url" targetdir="$INSTALL_PATH" override="true"/>
 
             <parsable targetfile="$INSTALL_PATH/bin/delService.bat"/>
@@ -210,8 +209,8 @@
             <parsable targetfile="$INSTALL_PATH/openesp-admin.url"/>
             <parsable targetfile="$INSTALL_PATH/.temp/install/java_opts.properties"/>
 
-            <parsable targetfile="$INSTALL_PATH/openesp.sh" os="unix" condition="izpack.linuxinstall"/>
-            <executable targetfile="$INSTALL_PATH/openesp.sh" stage="never" keep="true" condition="izpack.linuxinstall"/>
+            <parsable targetfile="$INSTALL_PATH/bin/openesp.sh" os="unix" condition="izpack.linuxinstall|izpack.macinstall"/>
+            <executable targetfile="$INSTALL_PATH/bin/openesp.sh" stage="never" keep="true" condition="izpack.linuxinstall|izpack.macinstall"/>
             
             <parsable targetfile="$INSTALL_PATH/.temp/install/linuxUtil.sh" os="unix" condition="izpack.linuxinstall"/>
             <executable targetfile="$INSTALL_PATH/.temp/install/linuxUtil.sh" stage="never" keep="true" condition="izpack.linuxinstall"/>
@@ -221,7 +220,8 @@
 
              <executable targetfile="$INSTALL_PATH/.temp/install/linuxUtil.sh" stage="postinstall" keep="true" condition="izpack.linuxinstall"/>
 
-             <executable targetfile="$INSTALL_PATH/bin/openespctl" stage="never" keep="true" condition="izpack.linuxinstall"/>
+             <executable targetfile="$INSTALL_PATH/bin/openespctl" stage="never" keep="true" condition="izpack.linuxinstall|izpack.macinstall"/>
+             <executable targetfile="$INSTALL_PATH/bin/run.sh" stage="never" keep="true" condition="izpack.linuxinstall|izpack.macinstall"/>
 
             <executable targetfile="$INSTALL_PATH/.temp/install/unpackOverlay.bat" stage="postinstall" keep="true" condition="izpack.windowsinstall+doOverlay">
                 <os family="windows"/>
@@ -242,14 +242,25 @@
             </executable>
 
 
-            <executable targetfile="$INSTALL_PATH/.temp/utilOpenESP.jar" class="PortReplace" type="jar" keep="true" stage="postinstall">
+            <executable targetfile="$INSTALL_PATH/bin/openespctl.bat" keep="true" stage="postinstall">
+                <os family="windows"/>
                    <args>
-                   <arg value="$INSTALL_PATH/tomcat/conf/server.xml"/>
+                   <arg value="port"/>
                    <arg value="${solr.port.number}"/>
                    <arg value="${solr.sslport.number}"/>
                    </args>
             </executable>
 
+            <executable targetfile="$INSTALL_PATH/bin/openespctl" keep="true" stage="postinstall">
+                <os family="unix"/>
+                   <args>
+                   <arg value="port"/>
+                   <arg value="${solr.port.number}"/>
+                   <arg value="${solr.sslport.number}"/>
+                   </args>
+            </executable>
+    
+    
              <executable targetfile="$INSTALL_PATH/bin/openespctl.bat"   stage="postinstall" keep="true" condition="ManifoldCFPackIsNotSelected+izpack.windowsinstall">
              <os family="windows"/>
              <args>
@@ -393,9 +404,6 @@ The application will always be installed, but if you uncheck this, it will be di
 
             <parsable targetfile="$INSTALL_PATH/bin/delService.sh"/>
             <parsable targetfile="$INSTALL_PATH/bin/linuxInstallService.sh"/>
-
-            <executable targetfile="$INSTALL_PATH/bin/openespctl" stage="never" keep="true"/>
-
             <executable targetfile="$INSTALL_PATH/bin/linuxInstallService.sh" stage="postinstall" keep="true"/>
 
             <executable targetfile="$INSTALL_PATH/bin/delService.sh" stage="uninstall" keep="true" condition="LinuxServicePackIsSelected">
