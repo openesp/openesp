@@ -100,7 +100,7 @@ public class CtlBase {
 
   static{
     if (openesp == null) {
-      def defOpenespDir = new File(".").getAbsoluteFile().getParentFile().getParentFile().getCanonicalPath()
+      def defOpenespDir = new File("").getAbsoluteFile().getParentFile().getCanonicalPath()
       def openEspEnv = System.getenv().get("OPENESP_HOME")
       openesp = (openEspEnv != null) ? openEspEnv : defOpenespDir
     }
