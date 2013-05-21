@@ -57,9 +57,10 @@ The installer generation depends on IzPack and Launch4J, which must be installed
 *   IzPack 4.x installed, and IZPACK_HOME variable set (http://izpack.org/)
 *   Launch4J for your platform and LAUNCH4J_HOME variable set (http://launch4j.sourceforge.net/)
 
-For MacOS the you need at least Launch4J 3.1.0 or later, to support Intel Macs.
+For Windows, use Launch4J 3.0.2, for OSX, use Launch4J 3.1.0
 
-If you want to user older version, MinGW tools are too old for Intel processors. Try these commands to install (assuming [MacPorts](http://www.macports.org/)):
+### OSX specific
+If you want to user older version of Launch4J, MinGW tools are too old for Intel processors. Try these commands to install (assuming [MacPorts](http://www.macports.org/)):
 
     sudo port install launch4j i386-mingw32-binutils i386-mingw32-w32api
     sudo cp /opt/local/bin/i386-mingw32-windres /opt/local/share/launch4j/bin/windres 
