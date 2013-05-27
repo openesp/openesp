@@ -35,7 +35,7 @@ for(a in args) {
 
 if (cmd == "help") {
   cmd = args[1]
-  args = ["-h", cmd].toListString()
+  args = Arrays.asList(["-h", cmd])
 }
 switch (cmd) {
   case "enable":
@@ -100,9 +100,10 @@ public class CtlBase {
 
   static{
     if (openesp == null) {
-      def defOpenespDir = new File("").getAbsoluteFile().getParentFile().getCanonicalPath()
-      def openEspEnv = System.getenv().get("OPENESP_HOME")
-      openesp = (openEspEnv != null) ? openEspEnv : defOpenespDir
+        def scriptDir = new File(CtlBase.class.protectionDomain.codeSource.location.path).parent
+        def openespDir = new File(scriptDir).getAbsoluteFile().getParentFile().getCanonicalPath().replaceAll("%20", " ");
+        def openEspEnv = System.getenv().get("OPENESP_HOME")
+        openesp = (openEspEnv != null) ? openEspEnv : openespDir
     }
   }
   
