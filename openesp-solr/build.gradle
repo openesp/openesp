@@ -1,6 +1,8 @@
 // Build file for Solr as part of OpenESP
 def fullName = "solr-${solrVersion}"
-def binUrl = "http://apache.uib.no/lucene/solr/$solrVersion/${fullName}.zip"
+// TODO: Use the nearest mirror suggested by http://www.apache.org/dyn/closer.cgi
+// Parse out the first match for <strong>(.*?)</strong> from the text
+def binUrl = "http://www.eu.apache.org/dist/lucene/solr/$solrVersion/${fullName}.zip"
 def buildDir = 'build'
 def warName = "${fullName}.war"
 def zipName = "${fullName}.zip"
