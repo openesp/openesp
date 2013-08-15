@@ -311,6 +311,38 @@
              <os family="unix"/>
              </executable>
 
+
+		<!-- Should read collection name from installer 
+			Also: To unpack solr war file the service shold be started and stopped prior to these stages. Either that 
+			or use the included 7za to extract it first.
+		-->
+             <executable targetfile="$INSTALL_PATH/cloud-scripts/zkcli.bat"   stage="postinstall" keep="true" condition="izpack.windowsinstall+SolrCloudEnabled">
+             <os family="windows"/>
+             <args>
+                   <arg value="-cmd"/>
+                   <arg value="upconfig"/>
+                   <arg value="-zkhost"/>
+                   <arg value="${solr.dzkhost}"/>
+                   <arg value="-confdir"/>
+                   <arg value="${INSTALL_PATH}\conf\solr\collection1\conf"/>
+                   <arg value="-confname"/>
+                   <arg value="conf1"/>
+             </args>
+             </executable>
+             <executable targetfile="$INSTALL_PATH/cloud-scripts/zkcli.bat"   stage="postinstall" keep="true" condition="izpack.windowsinstall+SolrCloudEnabled">
+             <os family="windows"/>
+             <args>
+                   <arg value="-cmd"/>
+                   <arg value="linkconfig"/>
+                   <arg value="-zkhost"/>
+                   <arg value="${solr.dzkhost}"/>
+                   <arg value="-collection"/>
+                   <arg value="collection1"/>
+                   <arg value="-confname"/>
+                   <arg value="conf1"/>
+             </args>
+             </executable>
+
              <executable targetfile="$INSTALL_PATH/bin/delInstallRecord.sh"   stage="uninstall" keep="true" condition="izpack.linuxinstall">
              <os family="unix"/>
              </executable>
