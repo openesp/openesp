@@ -76,6 +76,7 @@ task deployTomcat (dependsOn: 'getTomcat') {
       into "${deployDir}"
     }
     println "Renaming ${tomcatFromDir} to ${tomcatToDir}"
+    delete tomcatToDir
     new File(tomcatFromDir).renameTo(new File(tomcatToDir))    
     ant.chmod(dir: "${deployDir}/tomcat/bin", perm: '755', includes: '*')
   }
