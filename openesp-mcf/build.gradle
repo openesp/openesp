@@ -56,6 +56,8 @@ task organizeForOpenESP (dependsOn: 'unpackMcf') {
 			from 'tomcat-contexts'
 			include 'mcf.xml'
 			into "${deployDir}/tomcat/conf/Catalina/localhost"
+			// Let the default for MCF be disabled
+			rename ("mcf.xml", "mcf.xml_disabled")
 		}
 		copy {
 			from 'conf'

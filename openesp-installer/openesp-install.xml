@@ -222,6 +222,7 @@
 
              <executable targetfile="$INSTALL_PATH/bin/openespctl" stage="never" keep="true" condition="izpack.linuxinstall|izpack.macinstall"/>
              <executable targetfile="$INSTALL_PATH/bin/run.sh" stage="never" keep="true" condition="izpack.linuxinstall|izpack.macinstall"/>
+             <executable targetfile="$INSTALL_PATH/bin/zkcli.sh" stage="never" keep="true" condition="izpack.linuxinstall|izpack.macinstall"/>
 
             <executable targetfile="$INSTALL_PATH/.temp/install/unpackOverlay.bat" stage="postinstall" keep="true" condition="izpack.windowsinstall+doOverlay">
                 <os family="windows"/>
@@ -261,18 +262,18 @@
             </executable>
     
     
-             <executable targetfile="$INSTALL_PATH/bin/openespctl.bat"   stage="postinstall" keep="true" condition="ManifoldCFPackIsNotSelected+izpack.windowsinstall">
+             <executable targetfile="$INSTALL_PATH/bin/openespctl.bat"   stage="postinstall" keep="true" condition="ManifoldCFPackIsSelected+izpack.windowsinstall">
              <os family="windows"/>
              <args>
-                   <arg value="disable"/>
+                   <arg value="enable"/>
                    <arg value="mcf"/>
              </args>
              </executable>
 
-             <executable targetfile="$INSTALL_PATH/bin/openespctl"   stage="postinstall" keep="true" condition="ManifoldCFPackIsNotSelected+izpack.linuxinstall">
+             <executable targetfile="$INSTALL_PATH/bin/openespctl"   stage="postinstall" keep="true" condition="ManifoldCFPackIsSelected">
              <os family="unix"/>
              <args>
-                   <arg value="disable"/>
+                   <arg value="enable"/>
                    <arg value="mcf"/>
              </args>
              </executable>
@@ -285,7 +286,7 @@
              </args>
              </executable>
 
-             <executable targetfile="$INSTALL_PATH/bin/openespctl"   stage="postinstall" keep="true" condition="SolrPackIsNotSelected+izpack.linuxinstall">
+             <executable targetfile="$INSTALL_PATH/bin/openespctl"   stage="postinstall" keep="true" condition="SolrPackIsNotSelected">
              <os family="unix"/>
              <args>
                    <arg value="disable"/>
@@ -321,10 +322,10 @@
 
         </pack>
         
-       <pack name="ManifoldCF" preselected="yes" required="no" id="packManifoldCF">
+       <pack name="ManifoldCF" preselected="no" required="no" id="packManifoldCF">
             <description>ManifoldCF is a connector framework that lets you do web crawling, file system crawling, DB connections, index Sharepoint and other services. It also adds document-level security.
                 
-The application will always be installed, but if you uncheck this, it will be disabled and not run when Tomcat starts. ManifoldCF can easily be re-enabled later using the openespctl utility.
+The application binaries will always be installed, but if you check this, it will be enabled to run when Tomcat starts. ManifoldCF can easily be enabled/disabled later using the openespctl utility.
             </description>
 
         </pack>
