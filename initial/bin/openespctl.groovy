@@ -1,6 +1,7 @@
 import groovy.xml.XmlUtil
 import groovy.xml.StreamingMarkupBuilder
 import groovy.util.slurpersupport.GPathResult
+import java.lang.ProcessBuilder
 
 // Find script home and set that on base class
 def scriptDir = new File(getClass().protectionDomain.codeSource.location.path).parent
@@ -9,7 +10,7 @@ def openEspEnv = System.getenv().get("OPENESP_HOME")
 CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
 // List available commands
-commands = ['help', 'disable', 'enable', 'port', 'installrecords']
+commands = ['help', 'disable', 'enable', 'port', 'installrecords', 'solrmeter', 'vifun']
 commands_win = ['service']
 commands_nonwin = ['daemon']
 is_windows = System.properties['os.name'].toLowerCase().contains('windows')
@@ -63,6 +64,14 @@ switch (cmd) {
     Installrecords.main(trimargs(args))
     break
 
+  case "solrmeter":
+	Solrmeter.main(trimargs(args))
+    break	
+
+  case "vifun":
+	Vifun.main(trimargs(args))
+    break	
+	
   default:
     println "Unknown command."
     usage()   
@@ -97,6 +106,7 @@ public class CtlBase {
   static sep = System.getProperties().get("file.separator")
   static apps = ['solr', 'mcf']
   static openesp = null
+  static is_windows = System.properties['os.name'].toLowerCase().contains('windows')
 
   static{
     if (openesp == null) {
@@ -316,7 +326,7 @@ public class Linuxdaemon extends CtlBase {
     }
 
   }
-
+  
  public boolean install(openesphome, scriptname, javahome, memory) {
         println "Installing " + scriptname + " -- home = " + openesphome
         
@@ -392,6 +402,124 @@ public class Linuxdaemon extends CtlBase {
  }
 
 }
+
+public class Solrmeter extends CtlBase {
+  public static void main(String[] args) {
+    def cli = new CliBuilder(usage: 'openespctl solrmeter <start>')
+    cli.h(longOpt:'help', "Help")
+    def opt = cli.parse(args)
+
+    def xargs = opt.arguments()
+    if (xargs.size() < 1) {
+      cli.usage()
+      return
+    }
+    def cmd = xargs[0]
+
+    Solrmeter ld = new Solrmeter()
+
+	if(opt) {
+		if(opt.h) {
+		 cli.usage()
+		 return
+		}
+	}
+
+	if(cmd=="start")
+       ld.start()
+    else {
+        println "Invalid command"
+        cli.usage()
+        return
+    }
+  }
+  
+  public boolean start() {
+        println "Starting SolrMeter"
+		
+		//find out version of SolrMeter from version.properties file
+		def file
+		def solrmeterVersion
+		file = new File(openesp + File.separator + "version.properties")
+		file.eachLine { line ->
+			  if(line.contains("solrmeter")) {
+				solrmeterVersion = line.substring(line.lastIndexOf("=")+1)
+				solrmeterVersion = solrmeterVersion.trim()
+				solrmeterVersion.replaceAll("(\\r|\\n)", "")
+			  }
+		}		
+		if(solrmeterVersion) {
+			def solrmeterJar = "\"" + openesp + File.separator + "bundle" + File.separator + "solrmeter" + File.separator + "lib" + File.separator+ "solrmeter-" + solrmeterVersion + ".jar\"" 
+			if(is_windows) {
+				ProcessBuilder pb=new ProcessBuilder("java", "-jar", solrmeterJar);
+				Process process = pb.start();
+			}
+			else {
+				def cmdStart = "java -jar " + solrmeterJar
+				println cmdStart.execute().text
+				}
+		}
+		else 
+			println "No solrmeter version found in version.properties file !"
+		
+ }  
+  
+} 
+
+public class Vifun extends CtlBase {
+  public static void main(String[] args) {
+    def cli = new CliBuilder(usage: 'openespctl vifun <start>')
+    cli.h(longOpt:'help', "Help")
+    def opt = cli.parse(args)
+
+    def xargs = opt.arguments()
+    if (xargs.size() < 1) {
+      cli.usage()
+      return
+    }
+    def cmd = xargs[0]
+
+    Vifun ld = new Vifun()
+
+	if(opt) {
+		if(opt.h) {
+		 cli.usage()
+		 return
+		}
+	}
+
+	if(cmd=="start")
+       ld.start()
+    else {
+        println "Invalid command"
+        cli.usage()
+        return
+    }
+  }
+  
+  public boolean start() {
+        println "Starting Vifun"
+			
+		def vifunBin = openesp + File.separator + "bundle" + File.separator + "vifun" + File.separator + "bin"
+		if(is_windows) {
+			ProcessBuilder pb=new ProcessBuilder(vifunBin+"\\startApp.bat", ".\\", "Vifun");
+			pb.directory(new File(vifunBin))
+			Process process = pb.start();
+		}
+		else {
+			vifunApp = vifunBin  + File.separator + "startApp"
+			//Make it executable
+			def cmdPerm = "chmod +x " + vifunApp
+			println cmdPerm.execute().text
+			ProcessBuilder pb=new ProcessBuilder(vifunBin+"/startApp", "./", "Vifun");
+			pb.directory(new File(vifunBin))
+			Process process = pb.start();
+		}
+			
+ }  
+  
+}  
+
 public class Installrecords extends CtlBase {
   public static void main(String[] args) {
     def cli = new CliBuilder(usage: 'openespctl installrecords [options] <add | remove>')

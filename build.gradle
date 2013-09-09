@@ -19,7 +19,9 @@ def tomcatDir = "${deployDir}/tomcat"
 println "OpenESP version " + openEspVersion + 
         " with tomcat " + tomcatVersion + 
         ", Solr " + solrVersion + 
-        ", ManifoldCF " + mcfVersion
+        ", ManifoldCF " + mcfVersion +
+		", SolrMeter " + solrmeterVersion +
+		", Vifun " + vifunVersion
 println "TEMP dir: " + tmpDir
 
 defaultTasks 'dist' 
@@ -42,7 +44,7 @@ task init {
         into "${deployDir}"
       }
       println "Creating versions file"
-      def fields = ["openesp.version":openEspVersion, "solr.version":solrVersion, "tomcat.version":tomcatVersion, "mcf.version":mcfVersion]
+      def fields = ["openesp.version":openEspVersion, "solr.version":solrVersion, "tomcat.version":tomcatVersion, "mcf.version":mcfVersion, "solrmeter.version":solrmeterVersion, "vifun.version":vifunVersion]
       new File("${deployDir}/version.properties").withWriter { out ->
           fields.each() { key, value ->
               out.writeLine("${key} = ${value}")
@@ -104,6 +106,28 @@ task deployMcf (dependsOn: [':openesp-mcf:organizeForOpenESP', 'deployTomcat']) 
   }
 }
 
+task deploySolrMeter (dependsOn: [':openesp-solrmeter:organizeForOpenESP', 'deployTomcat']) {
+//  outputs.file "${deployDir}/conf/mcf/properties.xml"
+  doLast {
+    println "Deploying SolrMeter into ${deployDir}"
+    copy {
+      from "openesp-solrmeter/build"
+      into "${deployDir}/bundle"
+    }
+  }
+}
+
+task deployVifun (dependsOn: [':openesp-vifun:organizeForOpenESP', 'deployTomcat']) {
+//  outputs.file "${deployDir}/conf/mcf/properties.xml"
+  doLast {
+    println "Deploying Vifun into ${deployDir}"
+    copy {
+      from "openesp-vifun/build"
+      into "${deployDir}/bundle"
+    }
+  }
+}
+
 task deployAdmin (dependsOn: [':openesp-admin:organizeForOpenESP', 'deployTomcat']) {
   doLast {
     println "Deploying Admin webapp into ${deployDir}"
@@ -126,7 +150,7 @@ task deployServiceWrapper (dependsOn: ['deployTomcat']) {
   }
 }
 
-task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployAdmin', 'deployTomcat']) {
+task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployAdmin', 'deployTomcat', 'deploySolrMeter', 'deployVifun']) {
   doLast {
     println "Deploying overlay to ${deployDir}"
     copy {

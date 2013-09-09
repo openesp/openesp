@@ -1,0 +1,58 @@
+// Build file for SolrMeter as part of OpenESP
+def fullName = "solrmeter-${solrmeterVersion}"
+def jarName = "${fullName}.jar"
+def binUrl = "https://solrmeter.googlecode.com/files/${jarName}"
+def buildDir = 'build'
+def jarPath = "${tmpDir}/${jarName}"
+def unzippedPath = "${buildDir}/${fullName}"
+def deployDir = "${buildDir}/openesp"
+
+defaultTasks 'organizeForOpenESP' 
+
+task clean {
+	doLast {
+		delete buildDir
+	} 
+}
+
+task init {
+	outputs.dir buildDir
+	doLast {
+		mkdir buildDir
+	}
+}
+
+task getSolrmeter (dependsOn: 'init') {
+	outputs.file jarPath
+	doLast {
+    println "Downloading SolrMeter ${solrmeterVersion} into ${tmpDir}"
+		ant {
+			get src:binUrl,
+			dest:tmpDir, verbose:"true"
+		}
+	}
+}
+
+task copySolrmeter (dependsOn: 'getSolrmeter') {
+//	outputs.file "${unzippedPath}/README.txt"
+	doLast {
+    println "Copying SolrMeter into ${buildDir}"
+		copy {
+			from "${jarPath}"
+			into "${buildDir}/solrmeter/lib"
+		}
+	}
+}
+
+task organizeForOpenESP (dependsOn: 'copySolrmeter') {
+//	outputs.file "${deployDir}/webapps/mcf-crawler-ui.war"
+	doLast {
+
+		//copy {
+		//	from "${buildDir}"
+		//	into "${deployDir}/lib/solrmeter"
+		//}
+
+		new File("${deployDir}/logs/solrmeter").mkdirs()
+	}
+}

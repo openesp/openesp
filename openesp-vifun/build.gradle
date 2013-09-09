@@ -1,0 +1,57 @@
+// Build file for Vifun as part of OpenESP
+def fullName = "vifun-${vifunVersion}"
+def zipName = "${fullName}.zip"
+def binUrl = "https://vifun.googlecode.com/files/${zipName}"
+def buildDir = 'build'
+def zipPath = "${tmpDir}/${zipName}"
+def unzippedPath = "${buildDir}/${fullName}"
+def deployDir = "${buildDir}/openesp"
+
+defaultTasks 'organizeForOpenESP' 
+
+task clean {
+	doLast {
+		delete buildDir
+	} 
+}
+
+task init {
+	outputs.dir buildDir
+	doLast {
+		mkdir buildDir
+	}
+}
+
+task getVifun (dependsOn: 'init') {
+	outputs.file zipPath
+	doLast {
+    println "Downloading Vifun ${vifunVersion} into ${tmpDir}"
+		ant {
+			get src:binUrl,
+			dest:tmpDir, verbose:"true"
+		}
+	}
+}
+
+task unpackVifun (dependsOn: 'getVifun') {
+//	outputs.file "${unzippedPath}/README.txt"
+	doLast {
+    println "Unpacking Vifun into ${buildDir}"
+		copy {
+			from zipTree(zipPath)
+			into "${buildDir}/vifun"
+		}
+	}
+}
+
+task organizeForOpenESP (dependsOn: 'unpackVifun') {
+//	outputs.file "${deployDir}/webapps/mcf-crawler-ui.war"
+	doLast {
+	//	copy {
+	//		from "${unzippedPath}"
+	//		into "${buildDir}/bundle/vifun"
+	//	}
+
+		new File("${deployDir}/logs/vifun").mkdirs()
+	}
+}
