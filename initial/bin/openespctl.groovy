@@ -449,15 +449,12 @@ public class Solrmeter extends CtlBase {
 			  }
 		}		
 		if(solrmeterVersion) {
-			def solrmeterJar = "\"" + openesp + File.separator + "bundle" + File.separator + "solrmeter" + File.separator + "lib" + File.separator+ "solrmeter-" + solrmeterVersion + ".jar\"" 
+			def solrmeterJar = openesp + File.separator + "bundle" + File.separator + "solrmeter" + File.separator + "lib" + File.separator+ "solrmeter-" + solrmeterVersion + ".jar" 
 			if(is_windows) {
-				ProcessBuilder pb=new ProcessBuilder("java", "-jar", solrmeterJar);
-				Process process = pb.start();
+				solrmeterJar = "\"" + solrmeterJar + "\""
 			}
-			else {
-				def cmdStart = "java -jar " + solrmeterJar
-				println cmdStart.execute().text
-				}
+			ProcessBuilder pb=new ProcessBuilder("java", "-jar", solrmeterJar);
+			Process process = pb.start();				
 		}
 		else 
 			println "No solrmeter version found in version.properties file !"
@@ -507,11 +504,7 @@ public class Vifun extends CtlBase {
 			Process process = pb.start();
 		}
 		else {
-			vifunApp = vifunBin  + File.separator + "startApp"
-			//Make it executable
-			def cmdPerm = "chmod +x " + vifunApp
-			println cmdPerm.execute().text
-			ProcessBuilder pb=new ProcessBuilder(vifunBin+"/startApp", "./", "Vifun");
+			ProcessBuilder pb=new ProcessBuilder(vifunBin+"/vifun");
 			pb.directory(new File(vifunBin))
 			Process process = pb.start();
 		}

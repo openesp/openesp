@@ -14,6 +14,10 @@ Root admin application of OpenESP
 	<script src="tabcontent/tabcontent.js" type="text/javascript"></script>
     </head>
   <body>
+  
+  <img src="OpenESP-Logo.gif" alt="OpenESP logo" width="540" height="120">
+  <p/>
+  <p/>
 
 	<ul class="tabs">
 		<li><a href="#welcome">Welcome</a></li>
