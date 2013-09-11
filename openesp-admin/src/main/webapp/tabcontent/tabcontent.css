@@ -56,11 +56,17 @@ ul.tabs li.selected a:hover
 {
     text-decoration: none;
 }
+
+ul.tabs img.logo
+{
+    float: right;
+    margin-right:3px;
+}
      
 
 div.tabcontents
 {
-    border: 1px solid #B7B7B7; padding: 30px;
+    border: 1px solid #B7B7B7; padding: 20px;
     background-color:#FFF;
     border-radius: 0 3px 3px 3px;
 }

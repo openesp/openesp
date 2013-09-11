@@ -15,7 +15,6 @@ Root admin application of OpenESP
     </head>
   <body>
   
-  <img src="OpenESP-Logo.gif" alt="OpenESP logo" width="540" height="120">
   <p/>
   <p/>
 
@@ -25,6 +24,7 @@ Root admin application of OpenESP
 		<li><a href="#searchanalytics">Search Analytics</a></li>
 		<li><a href="#solrmeter">SolrMeter</a></li>
 		<li><a href="#vifun">Vifun</a></li>
+		<a href="#welcome"><img class="logo" src="OpenESP-Logo.gif" alt="OpenESP logo" height="25"></a>
 	</ul>
   
 	<div class="tabcontents">
@@ -43,7 +43,7 @@ Root admin application of OpenESP
 			<p>SPM client install instructions can be found <a href="https://apps.sematext.com/spm-reports/client.do" target="_blank">here</a>.</p>
 			<p>Note for Windows users: the <a href="https://sematext.atlassian.net/wiki/display/PUBSPM/SPM+FAQ#SPMFAQ-DoesSPMworkonWindows?" target="_blank">faq</a> from SPM recommends to install SPM client under Cygwin.</p>
 			<p>After the SPM client has been installed you need to run:</p>
-			<p><b>1) openespctl spm install <location/of/agent.jar></b> (will update tomcat options) </p>
+			<p><b>1) openespctl spm install &lt;location/of/agent.jar&gt;</b> (will update tomcat options) </p>
 			<p> and if on Windows: <b>2) openespctl service restart</b> </p>
 			<p> and if on Linux/Unix/Mac: <b>2) openespctl daemon restart</b> <p>
 		</div>
