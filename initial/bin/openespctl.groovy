@@ -10,7 +10,7 @@ def openEspEnv = System.getenv().get("OPENESP_HOME")
 CtlBase.setHome(openEspEnv == null ? openespDir : openEspEnv)
 
 // List available commands
-commands = ['help', 'disable', 'enable', 'port', 'installrecords', 'solrmeter', 'vifun']
+commands = ['help', 'disable', 'enable', 'port', 'installrecords', 'solrmeter', 'vifun', 'spm']
 commands_win = ['service']
 commands_nonwin = ['daemon']
 is_windows = System.properties['os.name'].toLowerCase().contains('windows')
@@ -71,6 +71,10 @@ switch (cmd) {
   case "vifun":
 	Vifun.main(trimargs(args))
     break	
+
+  case "spm":
+	Spm.main(trimargs(args))
+    break
 	
   default:
     println "Unknown command."
@@ -459,6 +463,93 @@ public class Solrmeter extends CtlBase {
 		else 
 			println "No solrmeter version found in version.properties file !"
 		
+ }  
+  
+} 
+
+
+public class Spm extends CtlBase {
+  public static void main(String[] args) {
+    def cli = new CliBuilder(usage: 'openespctl spm [--spmjarfile=<spmjar> --servicename] <install>')
+    cli.j(longOpt:'spmjarfile', 'location of spm agent jar file', args:1)
+	cli.s(longOpt:'servicename', 'OpenESP windows service name Or Linux daemon script name', args:1)
+    cli.h(longOpt:'help', "Help")
+    def opt = cli.parse(args)
+
+    def xargs = opt.arguments()
+    if (xargs.size() < 1) {
+      cli.usage()
+      return
+    }
+    def cmd = xargs[0]
+
+    Spm ld = new Spm()
+
+	if(opt) {
+		if(opt.h) {
+		 cli.usage()
+		 return
+		}
+	}
+
+	if(cmd=="install")
+       ld.install(opt.j, opt.s)
+    else {
+        println "Invalid command"
+        cli.usage()
+        return
+    }
+  }
+  
+  public boolean install(spmjarfile, service) {
+        println "Updating OpenESP with SPM agent startup options ..."
+	
+		def joptsFile = new File(openesp + "/bin/java_opts.properties")
+		def javaSpm = "\n-Dcom.sun.management.jmxremote\n-javaagent:" + spmjarfile + "=836c979d-a957-4b7d-867b-6ea598419676::default"
+		
+		//On windows how to bypass file security ? Even running openespctl from an Admin console won't work
+		if(!is_windows) {
+			joptsFile.append(javaSpm)
+		}
+		
+		def jvmOptions = "-Dcom.sun.management.jmxremote;-javaagent:"  + spmjarfile + "=836c979d-a957-4b7d-867b-6ea598419676::default"
+		//println jvmOptions
+		
+		if(is_windows) {
+			def openEspExe = "\"" + openesp + "\\bin\\OpenESP.exe\""
+			def updateService = "//US//" + service
+			ProcessBuilder pb=new ProcessBuilder("cmd", "/c", openEspExe, updateService, "++JvmOptions", jvmOptions)
+			Process process = pb.start();	
+		} else {		
+			def scriptFile = new File("/etc/init.d/" + service);
+			def scriptFileNew = new File("/etc/init.d/" + service + "New");
+
+			scriptFile.eachLine { line ->
+			  if(line.startsWith("export JAVA_OPTS=")) {
+				scriptFileNew << (line +"\n")
+				scriptFileNew << ("-Dcom.sun.management.jmxremote \\\n")
+				scriptFileNew << ("-javaagent:"  + spmjarfile + "=836c979d-a957-4b7d-867b-6ea598419676::default \\\n")
+			  }
+			  else {
+				scriptFileNew << (line +"\n")
+			  }
+			}
+			
+			// set permissions for script to /etc/init.d
+			def cmdPerm = "chmod 755 /etc/init.d/" + service + "New"
+			println cmdPerm.execute().text	
+
+			def delPrevScript = "rm -f " + "/etc/init.d/" + service
+			println delPrevScript.execute().text
+			
+			def renameScript = "mv /etc/init.d/" + service + "New" + " /etc/init.d/" + service
+			println renameScript.execute().text
+		
+		}
+		
+		println "Done! Now you can restart your OpenESP app server for SPM options to take effect"
+		println "if on Windows, just restart the OpenESP service"
+		println "if on Linux/Mac run: sudo openespctl daemon restart"
  }  
   
 } 

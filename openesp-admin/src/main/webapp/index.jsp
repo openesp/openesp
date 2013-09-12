@@ -43,8 +43,8 @@ Root admin application of OpenESP
 			<p>SPM client install instructions can be found <a href="https://apps.sematext.com/spm-reports/client.do" target="_blank">here</a>.</p>
 			<p>Note for Windows users: the <a href="https://sematext.atlassian.net/wiki/display/PUBSPM/SPM+FAQ#SPMFAQ-DoesSPMworkonWindows?" target="_blank">faq</a> from SPM recommends to install SPM client under Cygwin.</p>
 			<p>After the SPM client has been installed you need to run:</p>
-			<p><b>1) openespctl spm install &lt;location/of/agent.jar&gt;</b> (will update tomcat options) </p>
-			<p> and if on Windows: <b>2) openespctl service restart</b> </p>
+			<p><b>1) openespctl spm install &lt;location/of/agent.jar&gt;</b> (will update tomcat options. On linux use sudo to run the command) </p>
+			<p> and if on Windows: <b>2) restart the OpenESP service</b> </p>
 			<p> and if on Linux/Unix/Mac: <b>2) openespctl daemon restart</b> <p>
 		</div>
 		
