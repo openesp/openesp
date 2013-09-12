@@ -12,6 +12,19 @@ Root admin application of OpenESP
     </style>
 	<link href="tabcontent/tabcontent.css" rel="stylesheet" type="text/css" />
 	<script src="tabcontent/tabcontent.js" type="text/javascript"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>
+  	$.ajax({
+      url: '/mcf/',
+      type: 'HEAD',
+      success: function(transport) {
+          document.getElementById("mcfLink").href='/mcf/'; 
+          document.getElementById("mcfText").innerHTML=''; 
+          return false;
+          alert('foo');
+      }
+    });
+	</script>
     </head>
   <body>
   
@@ -32,7 +45,7 @@ Root admin application of OpenESP
 		  <h1>Welcome to OpenESP</h1>
 		  This is the OpenESP administration panel. This is your starting point for managing your search engine.
 		  <p><a href="/solr/"><b>Solr</b></a></p>
-		  <p><a href="/mcf/"><b>ManifoldCF</b> (see Admin Guide for how to enable)</a></p>
+		  <p><a id="mcfLink" href='javascript: void(0)'><b>ManifoldCF</b></a> <span id="mcfText">(disabled, run "bin/openespctl enable mcf" to enable)</span></p>
 			For help or more info, please see <a href="http://openesp.org/" target="_blank">openesp.org</a> and <a href="https://github.com/openesp/openesp/" target="_blank">GitHub</a>
 		</div>
 	
