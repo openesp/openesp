@@ -21,7 +21,6 @@ Root admin application of OpenESP
           document.getElementById("mcfLink").href='/mcf/'; 
           document.getElementById("mcfText").innerHTML=''; 
           return false;
-          alert('foo');
       }
     });
 	</script>
