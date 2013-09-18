@@ -44,7 +44,7 @@ Root admin application of OpenESP
 		<div id="welcome">
 		  <h1>Welcome to OpenESP</h1>
 		  This is the OpenESP administration panel. This is your starting point for managing your search engine.
-		  <p><a href="/solr/"><b>Solr</b></a></p>
+		  <p><a href="/solr/#/"><b>Solr</b></a></p>
 		  <p><a id="mcfLink" href='javascript: void(0)'><b>ManifoldCF</b></a> <span id="mcfText">(disabled, run "bin/openespctl enable mcf" to enable)</span></p>
 			For help or more info, please see <a href="http://openesp.org/" target="_blank">openesp.org</a> and <a href="https://github.com/openesp/openesp/" target="_blank">GitHub</a>
 		</div>
