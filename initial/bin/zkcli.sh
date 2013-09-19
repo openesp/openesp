@@ -30,5 +30,6 @@ if [ ! -e $sdir/../tomcat/webapps/solr ] ; then
   exit 2
 fi
 
-PATH=$JAVA_HOME/bin:$PATH $JVM -Dlog4j.configuration=file:$sdir/../conf/log4j.stderr.properties -classpath "$sdir/../tomcat/webapps/solr/WEB-INF/lib/*:$sdir/../tomcat/lib/logging/*" org.apache.solr.cloud.ZkCLI ${1+"$@"}
+PATH=$JAVA_HOME/bin:$PATH
+$JVM -Dopenesp.home=$sdir/.. -Dlog4j.configuration=file:$sdir/../conf/log4j.stderr.properties -classpath "$sdir/../tomcat/webapps/solr/WEB-INF/lib/*:$sdir/../tomcat/lib/logging/*" org.apache.solr.cloud.ZkCLI ${1+"$@"}
 
