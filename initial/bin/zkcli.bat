@@ -34,5 +34,5 @@ IF EXIST "%SDIR%\..\tomcat\webapps\solr" GOTO RUN_TOOL (
 )
      
 :RUN_TOOL
-"%JVM%" -Dlog4j.configuration=file:%SDIR%\..\conf\log4j.stderr.properties -classpath "%SDIR%\..\tomcat\webapps\solr\WEB-INF\lib\*;%SDIR%\..\tomcat\lib\logging\*" org.apache.solr.cloud.ZkCLI %*
+"%JVM%" -Dopenesp.home=%SDIR%\.. -Dlog4j.configuration=file:%SDIR%\..\conf\log4j.stderr.properties -classpath "%SDIR%\..\tomcat\webapps\solr\WEB-INF\lib\*;%SDIR%\..\tomcat\lib\logging\*" org.apache.solr.cloud.ZkCLI %*
 

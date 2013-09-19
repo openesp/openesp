@@ -17,11 +17,12 @@ def tomcatUrl = "http://apache.uib.no/tomcat/tomcat-${tomcatVersion.split("\\.")
 def tomcatDir = "${deployDir}/tomcat"
 
 println "OpenESP version " + openEspVersion + 
+        " with zookeeper " + zookeeperVersion + 
         " with tomcat " + tomcatVersion + 
         ", Solr " + solrVersion + 
         ", ManifoldCF " + mcfVersion +
-		", SolrMeter " + solrmeterVersion +
-		", Vifun " + vifunVersion
+        ", SolrMeter " + solrmeterVersion +
+        ", Vifun " + vifunVersion
 println "TEMP dir: " + tmpDir
 
 defaultTasks 'dist' 
@@ -106,6 +107,17 @@ task deployMcf (dependsOn: [':openesp-mcf:organizeForOpenESP', 'deployTomcat']) 
   }
 }
 
+task deployZookeeper (dependsOn: [':openesp-zookeeper:organizeForOpenESP', 'deployTomcat']) {
+//  outputs.file "${deployDir}/conf/mcf/properties.xml"
+  doLast {
+    println "Deploying Zookeeper into ${deployDir}"
+    copy {
+      from "openesp-zookeeper/build/openesp"
+      into "${deployDir}"
+    }
+  }
+}
+
 task deploySolrMeter (dependsOn: [':openesp-solrmeter:organizeForOpenESP', 'deployTomcat']) {
 //  outputs.file "${deployDir}/conf/mcf/properties.xml"
   doLast {
@@ -150,7 +162,7 @@ task deployServiceWrapper (dependsOn: ['deployTomcat']) {
   }
 }
 
-task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployAdmin', 'deployTomcat', 'deploySolrMeter', 'deployVifun']) {
+task deployOverlay (dependsOn: ['deploySolr', 'deployMcf', 'deployAdmin', 'deployTomcat', 'deploySolrMeter', 'deployVifun', 'deployZookeeper']) {
   doLast {
     println "Deploying overlay to ${deployDir}"
     copy {

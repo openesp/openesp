@@ -1,0 +1,49 @@
+// Build file for ZooKeeper as part of OpenESP
+def fullName = "zookeeper-${zookeeperVersion}"
+def tarName = "${fullName}.tar.gz"
+def jarName = "${fullName}.jar"
+def binUrl = "http://apache.vianett.no/zookeeper/zookeeper-${zookeeperVersion}/${tarName}"
+def buildDir = 'build'
+def tarPath = "${tmpDir}/${tarName}"
+def unzippedPath = "${buildDir}/${fullName}"
+def deployDir = "${buildDir}/openesp/zookeeper"
+
+defaultTasks 'organizeForOpenESP' 
+
+task clean {
+	doLast {
+		delete buildDir
+	} 
+}
+
+task init {
+	outputs.dir buildDir
+	doLast {
+		mkdir buildDir
+	}
+}
+
+task getZookeeper (dependsOn: 'init') {
+	outputs.file tarPath
+	doLast {
+    println "Downloading ZooKeeper ${zookeeperVersion} into ${tmpDir}"
+		ant {
+			get src:binUrl,
+			dest:tmpDir, verbose:"true"
+		}
+	}
+}
+
+task unpackZookeeper (type: Copy, dependsOn: 'getZookeeper') {
+    from tarTree(tarPath)
+    into "${buildDir}"
+}
+
+task organizeForOpenESP (dependsOn: 'unpackZookeeper') {
+  doLast {
+		copy {
+			from "${unzippedPath}"
+			into "${deployDir}"
+		}
+  }
+}
