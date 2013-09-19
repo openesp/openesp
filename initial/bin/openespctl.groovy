@@ -470,8 +470,9 @@ public class Solrmeter extends CtlBase {
 
 public class Spm extends CtlBase {
   public static void main(String[] args) {
-    def cli = new CliBuilder(usage: 'openespctl spm [--spmjarfile=<spmjar> --servicename] <install>')
-    cli.j(longOpt:'spmjarfile', 'location of spm agent jar file', args:1)
+    def cli = new CliBuilder(usage: 'openespctl spm [--spmjarfile=<spmjar> --spmappid=<id> --servicename=<name>] <install>')
+    cli.j(longOpt:'spmjarfile', 'Location of spm agent jar file', args:1)
+	cli.i(longOpt:'spmappid', 'SPM application ID', args:1)
 	cli.s(longOpt:'servicename', 'OpenESP windows service name Or Linux daemon script name', args:1)
     cli.h(longOpt:'help', "Help")
     def opt = cli.parse(args)
@@ -492,8 +493,26 @@ public class Spm extends CtlBase {
 		}
 	}
 
+	if(!opt.j) {
+		println "-j|--spmjarfile is a required parameter"
+		cli.usage()
+		return
+	}
+	
+	if(!opt.s) {
+		println "-s|--servicename is a required parameter"
+		cli.usage()
+		return
+	}
+
+	if(!opt.i) {
+		println "-i|--spmappid is a required parameter"
+		cli.usage()
+		return
+	}
+	
 	if(cmd=="install")
-       ld.install(opt.j, opt.s)
+       ld.install(opt.j, opt.s, opt.i)
     else {
         println "Invalid command"
         cli.usage()
@@ -501,18 +520,18 @@ public class Spm extends CtlBase {
     }
   }
   
-  public boolean install(spmjarfile, service) {
+  public boolean install(spmjarfile, service, appid) {
         println "Updating OpenESP with SPM agent startup options ..."
 	
 		def joptsFile = new File(openesp + "/bin/java_opts.properties")
-		def javaSpm = "\n-Dcom.sun.management.jmxremote\n-javaagent:" + spmjarfile + "=836c979d-a957-4b7d-867b-6ea598419676::default"
+		def javaSpm = "\n-Dcom.sun.management.jmxremote\n-javaagent:" + spmjarfile + "=" + appid + "::default"
 		
 		//On windows how to bypass file security ? Even running openespctl from an Admin console won't work
 		if(!is_windows) {
 			joptsFile.append(javaSpm)
 		}
 		
-		def jvmOptions = "-Dcom.sun.management.jmxremote;-javaagent:"  + spmjarfile + "=836c979d-a957-4b7d-867b-6ea598419676::default"
+		def jvmOptions = "-Dcom.sun.management.jmxremote;-javaagent:"  + spmjarfile + "=" + appid + "::default"
 		//println jvmOptions
 		
 		if(is_windows) {
@@ -528,7 +547,7 @@ public class Spm extends CtlBase {
 			  if(line.startsWith("export JAVA_OPTS=")) {
 				scriptFileNew << (line +"\n")
 				scriptFileNew << ("-Dcom.sun.management.jmxremote \\\n")
-				scriptFileNew << ("-javaagent:"  + spmjarfile + "=836c979d-a957-4b7d-867b-6ea598419676::default \\\n")
+				scriptFileNew << ("-javaagent:"  + spmjarfile + "=" + appid + "::default \\\n")
 			  }
 			  else {
 				scriptFileNew << (line +"\n")
