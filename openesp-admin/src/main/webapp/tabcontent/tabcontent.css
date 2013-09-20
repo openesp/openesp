@@ -70,3 +70,14 @@ div.tabcontents
     background-color:#FFF;
     border-radius: 0 3px 3px 3px;
 }
+
+pre, code {
+    background-color: #EEEEEE;
+    padding: 7px 16px;
+}
+
+span.inlinecode {
+    font: normal 12px monospace;
+    background-color: #EEEEEE;
+    padding: 2px 2px;
+}

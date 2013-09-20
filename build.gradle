@@ -147,6 +147,10 @@ task deployAdmin (dependsOn: [':openesp-admin:organizeForOpenESP', 'deployTomcat
       from "openesp-admin/build/openesp"
       into "${deployDir}"
     }
+    copy {
+      from "${deployDir}/doc"
+      into "${deployDir}/webapps/openesp-admin/"
+    }
   }
 }
 
