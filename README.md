@@ -122,7 +122,7 @@ openesp
 ```
 
 ### Development (source) layout
-Here's the layout of the file layout of the source tree
+Here's the file layout of the source tree
 ```
 openesp
   ├── build.gradle         : build script
@@ -133,6 +133,10 @@ openesp
   ├── openesp-solr         : Sub project for building (or downloading) Apache Solr
   ├── openesp-mcf          : Sub project for building (or downloading) Apache MCF
   ├── openesp-installer    : Sub project for building the installer
+  ├── openesp-admin        : Admin webapp
+  ├── openesp-solrmeter    : Bundled SolrMeter app
+  ├── openesp-vifun        : Bundled Vifun app
+  ├── openesp-zookeeper    : Bundled ZooKeeper
   ├── build.gradle         : The makefile for gradle
   ├── gradle.properties    : Specify global properties here, such as versions for Solr, Tomcat etc
   └── build                : After running gradle, the release artifacts are generated here
