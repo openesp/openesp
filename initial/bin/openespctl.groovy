@@ -499,26 +499,58 @@ public class Spm extends CtlBase {
 		return
 	}
 	
-	if(!opt.s) {
-		println "-s|--servicename is a required parameter"
-		cli.usage()
-		return
-	}
-
 	if(!opt.i) {
 		println "-i|--spmappid is a required parameter"
 		cli.usage()
 		return
+	}	
+	
+	def service = opt.s
+	if(!opt.s) {
+		service = ld.guessService()
+		if(!service) {
+			println "no service found "
+			return
+		}
+		else		
+			println "Service name is : " + service
 	}
 	
 	if(cmd=="install")
-       ld.install(opt.j, opt.s, opt.i)
+       ld.install(opt.j, service, opt.i)
     else {
         println "Invalid command"
         cli.usage()
         return
     }
   }
+  
+  public String guessService() {
+
+   def file
+   String service = new String()
+   def notfound = true
+   if (is_windows) {
+      file = new File("C:\\ProgramData\\OpenESP\\openesp-installs.csv")
+    } else {
+      file = new File("/etc/openesp-installs.csv")
+    }  
+
+    file.eachLine { line ->
+        if(line.contains(openesp)) {
+			String[] items = line.split(",")
+			service = items[items.length-1]
+			service = service.trim()
+			if(service.contains("/etc/init.d")) {
+				service = service.substring(service.lastIndexOf("/") + 1)
+			}
+			notfound=false
+		}	
+	}
+	if(notfound)
+		service=null
+	return service	
+}	
   
   public boolean install(spmjarfile, service, appid) {
         println "Updating OpenESP with SPM agent startup options ..."
