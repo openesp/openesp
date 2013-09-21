@@ -303,13 +303,13 @@ public class Linuxdaemon extends CtlBase {
             return
        }
        if( opt.o) {
-           def directory = new File(opt.o)
-	   if(!directory.exists()) {
-		println  opt.o + " directory does not exist"
-		return
-	   }
-	   else
-            ld.install( opt.o, opt.n, opt.j, opt.m)
+         def directory = new File(opt.o)
+         if(!directory.exists()) {
+           println  opt.o + " directory does not exist"
+           return
+         }
+         else
+         ld.install( opt.o, opt.n, opt.j, opt.m)
        }
        else  {
              ld.install( openesp, opt.n, opt.j, opt.m)
@@ -336,11 +336,11 @@ public class Linuxdaemon extends CtlBase {
         
         def file = new File(openesphome + "/bin/openesp.sh")
         def fileText = file.text;
-	def scriptFile = new File("/etc/init.d/" + scriptname);
-	//scriptFile.write(fileText);
+        def scriptFile = new File("/etc/init.d/" + scriptname);
+        //scriptFile.write(fileText);
 
-	//Read java_opts from java_opts.properties
-	def javaOpts = "export JAVA_OPTS=\""
+        //Read java_opts from java_opts.properties
+        def javaOpts = "export JAVA_OPTS=\""
 
         def joptsFile = new File(openesphome + "/bin/java_opts.properties")
             joptsFile.eachLine { line ->
@@ -378,93 +378,93 @@ public class Linuxdaemon extends CtlBase {
 
         println cmdPerm.execute().text
 
- }
- 
- public boolean uninstall(scriptname) {
+      }
+
+      public boolean uninstall(scriptname) {
         stop(scriptname)
         println "Uninstalling " + scriptname
         def cmdDel = "rm -f /etc/init.d/" + scriptname
         println cmdDel.execute().text
- }
+      }
 
-  public boolean start(scriptname) {
+      public boolean start(scriptname) {
         println "Starting " + scriptname
         def cmdStart = "/etc/init.d/" + scriptname + " start"
         println cmdStart.execute().text
- }
- 
-   public boolean stop(scriptname) {
+      }
+
+      public boolean stop(scriptname) {
         println "Stopping " + scriptname
         def cmdStop = "/etc/init.d/" + scriptname + " stop"
         println cmdStop.execute().text
- }
- 
-   public boolean status(scriptname) {
+      }
+
+      public boolean status(scriptname) {
         println "Status for  " + scriptname
         def cmdStatus = "/etc/init.d/" + scriptname + " status"
         println cmdStatus.execute().text
- }
+      }
 
-}
-
-public class Solrmeter extends CtlBase {
-  public static void main(String[] args) {
-    def cli = new CliBuilder(usage: 'openespctl solrmeter <start>')
-    cli.h(longOpt:'help', "Help")
-    def opt = cli.parse(args)
-
-    def xargs = opt.arguments()
-    if (xargs.size() < 1) {
-      cli.usage()
-      return
     }
-    def cmd = xargs[0]
 
-    Solrmeter ld = new Solrmeter()
+    public class Solrmeter extends CtlBase {
+      public static void main(String[] args) {
+        def cli = new CliBuilder(usage: 'openespctl solrmeter <start>')
+        cli.h(longOpt:'help', "Help")
+        def opt = cli.parse(args)
 
-	if(opt) {
-		if(opt.h) {
-		 cli.usage()
-		 return
-		}
-	}
+        def xargs = opt.arguments()
+        if (xargs.size() < 1) {
+          cli.usage()
+          return
+        }
+        def cmd = xargs[0]
 
-	if(cmd=="start")
-       ld.start()
-    else {
-        println "Invalid command"
-        cli.usage()
-        return
-    }
-  }
+        Solrmeter ld = new Solrmeter()
+
+        if(opt) {
+          if(opt.h) {
+            cli.usage()
+            return
+          }
+        }
+
+        if(cmd=="start")
+        ld.start()
+        else {
+          println "Invalid command"
+          cli.usage()
+          return
+        }
+      }
   
   public boolean start() {
-        println "Starting SolrMeter"
-		
-		//find out version of SolrMeter from version.properties file
-		def file
-		def solrmeterVersion
-		file = new File(openesp + File.separator + "version.properties")
-		file.eachLine { line ->
-			  if(line.contains("solrmeter")) {
-				solrmeterVersion = line.substring(line.lastIndexOf("=")+1)
-				solrmeterVersion = solrmeterVersion.trim()
-				solrmeterVersion.replaceAll("(\\r|\\n)", "")
-			  }
-		}		
-		if(solrmeterVersion) {
-			def solrmeterJar = openesp + File.separator + "bundle" + File.separator + "solrmeter" + File.separator + "lib" + File.separator+ "solrmeter-" + solrmeterVersion + ".jar" 
-			if(is_windows) {
-				solrmeterJar = "\"" + solrmeterJar + "\""
-			}
-			ProcessBuilder pb=new ProcessBuilder("java", "-jar", solrmeterJar);
-			Process process = pb.start();				
-		}
-		else 
-			println "No solrmeter version found in version.properties file !"
-		
- }  
-  
+    println "Starting SolrMeter"
+
+    //find out version of SolrMeter from version.properties file
+    def file
+    def solrmeterVersion
+    file = new File(openesp + File.separator + "version.properties")
+    file.eachLine { line ->
+      if(line.contains("solrmeter")) {
+        solrmeterVersion = line.substring(line.lastIndexOf("=")+1)
+        solrmeterVersion = solrmeterVersion.trim()
+        solrmeterVersion.replaceAll("(\\r|\\n)", "")
+      }
+    }		
+    if(solrmeterVersion) {
+      def solrmeterJar = openesp + File.separator + "bundle" + File.separator + "solrmeter" + File.separator + "lib" + File.separator+ "solrmeter-" + solrmeterVersion + ".jar" 
+      if(is_windows) {
+        solrmeterJar = "\"" + solrmeterJar + "\""
+      }
+      ProcessBuilder pb=new ProcessBuilder("java", "-jar", solrmeterJar);
+      Process process = pb.start();				
+    }
+    else 
+    println "No solrmeter version found in version.properties file !"
+
+  }  
+
 } 
 
 
@@ -472,8 +472,8 @@ public class Spm extends CtlBase {
   public static void main(String[] args) {
     def cli = new CliBuilder(usage: 'openespctl spm [--spmjarfile=<spmjar> --spmappid=<id> --servicename=<name>] <install>')
     cli.j(longOpt:'spmjarfile', 'Location of spm agent jar file', args:1)
-	cli.i(longOpt:'spmappid', 'SPM application ID', args:1)
-	cli.s(longOpt:'servicename', 'OpenESP windows service name Or Linux daemon script name', args:1)
+    cli.i(longOpt:'spmappid', 'SPM application ID', args:1)
+    cli.s(longOpt:'servicename', 'OpenESP windows service name Or Linux daemon script name', args:1)
     cli.h(longOpt:'help', "Help")
     def opt = cli.parse(args)
 
@@ -486,122 +486,127 @@ public class Spm extends CtlBase {
 
     Spm ld = new Spm()
 
-	if(opt) {
-		if(opt.h) {
-		 cli.usage()
-		 return
-		}
-	}
-
-	if(!opt.j) {
-		println "-j|--spmjarfile is a required parameter"
-		cli.usage()
-		return
-	}
-	
-	if(!opt.i) {
-		println "-i|--spmappid is a required parameter"
-		cli.usage()
-		return
-	}	
-	
-	def service = opt.s
-	if(!opt.s) {
-		service = ld.guessService()
-		if(!service) {
-			println "no service found "
-			return
-		}
-		else		
-			println "Service name is : " + service
-	}
-	
-	if(cmd=="install")
-       ld.install(opt.j, service, opt.i)
-    else {
-        println "Invalid command"
+    if(opt) {
+      if(opt.h) {
         cli.usage()
+        return
+      }
+    }
+
+    if(!opt.j) {
+      println "-j|--spmjarfile is a required parameter"
+      cli.usage()
+      return
+    }
+
+    if(!opt.i) {
+      println "-i|--spmappid is a required parameter"
+      cli.usage()
+      return
+    }	
+
+    def service = opt.s
+    if(!opt.s) {
+      service = ld.guessService()
+      if(!service) {
+        println "No service found. service or daemon must be installed. Please supply service/daemon name with -s switch."
+        cli.usage()
+        return
+      }
+      else		
+      println "Service name is : " + service
+    }
+
+    if(cmd=="install")
+    ld.install(opt.j, service, opt.i)
+    else {
+      println "Invalid command"
+      cli.usage()
         return
     }
   }
-  
+
   public String guessService() {
-
-   def file
-   String service = new String()
-   def notfound = true
-   if (is_windows) {
+    def file
+    String service = new String()
+    def notfound = true
+    if (is_windows) {
       file = new File("C:\\ProgramData\\OpenESP\\openesp-installs.csv")
-    } else {
-      file = new File("/etc/openesp-installs.csv")
-    }  
+      } else {
+        file = new File("/etc/openesp-installs.csv")
+      }
 
-    file.eachLine { line ->
+      if (! file.exists()) {
+        println "Failed to guess service name from install records ${file}"
+        return null
+      }
+
+      file.eachLine { line ->
         if(line.contains(openesp)) {
-			String[] items = line.split(",")
-			service = items[items.length-1]
-			service = service.trim()
-			if(service.contains("/etc/init.d")) {
-				service = service.substring(service.lastIndexOf("/") + 1)
-			}
-			notfound=false
-		}	
-	}
-	if(notfound)
-		service=null
-	return service	
-}	
-  
-  public boolean install(spmjarfile, service, appid) {
-        println "Updating OpenESP with SPM agent startup options ..."
-	
-		def joptsFile = new File(openesp + "/bin/java_opts.properties")
-		def javaSpm = "\n-Dcom.sun.management.jmxremote\n-javaagent:" + spmjarfile + "=" + appid + "::default"
-		
-		//On windows how to bypass file security ? Even running openespctl from an Admin console won't work
-		if(!is_windows) {
-			joptsFile.append(javaSpm)
-		}
-		
-		def jvmOptions = "-Dcom.sun.management.jmxremote;-javaagent:"  + spmjarfile + "=" + appid + "::default"
-		//println jvmOptions
-		
-		if(is_windows) {
-			def openEspExe = "\"" + openesp + "\\bin\\OpenESP.exe\""
-			def updateService = "//US//" + service
-			ProcessBuilder pb=new ProcessBuilder("cmd", "/c", openEspExe, updateService, "++JvmOptions", jvmOptions)
-			Process process = pb.start();	
-		} else {		
-			def scriptFile = new File("/etc/init.d/" + service);
-			def scriptFileNew = new File("/etc/init.d/" + service + "New");
+          String[] items = line.split(",")
+          service = items[items.length-1]
+          service = service.trim()
+          if(service.contains("/etc/init.d")) {
+            service = service.substring(service.lastIndexOf("/") + 1)
+          }
+          notfound=false
+        }	
+      }
+      if(notfound)
+      service=null
+      return service	
+    }	
 
-			scriptFile.eachLine { line ->
-			  if(line.startsWith("export JAVA_OPTS=")) {
-				scriptFileNew << (line +"\n")
-				scriptFileNew << ("-Dcom.sun.management.jmxremote \\\n")
-				scriptFileNew << ("-javaagent:"  + spmjarfile + "=" + appid + "::default \\\n")
-			  }
-			  else {
-				scriptFileNew << (line +"\n")
-			  }
-			}
-			
-			// set permissions for script to /etc/init.d
-			def cmdPerm = "chmod 755 /etc/init.d/" + service + "New"
-			println cmdPerm.execute().text	
+    public boolean install(spmjarfile, service, appid) {
+      println "Updating OpenESP with SPM agent startup options ..."
 
-			def delPrevScript = "rm -f " + "/etc/init.d/" + service
-			println delPrevScript.execute().text
-			
-			def renameScript = "mv /etc/init.d/" + service + "New" + " /etc/init.d/" + service
-			println renameScript.execute().text
-		
-		}
-		
-		println "Done! Now you can restart your OpenESP app server for SPM options to take effect"
-		println "if on Windows, just restart the OpenESP service"
-		println "if on Linux/Mac run: sudo openespctl daemon restart"
- }  
+      def joptsFile = new File(openesp + "/bin/java_opts.properties")
+      def javaSpm = "\n-Dcom.sun.management.jmxremote\n-javaagent:" + spmjarfile + "=" + appid + "::default"
+
+      //On windows how to bypass file security ? Even running openespctl from an Admin console won't work
+      if(!is_windows) {
+        joptsFile.append(javaSpm)
+      }
+
+      def jvmOptions = "-Dcom.sun.management.jmxremote;-javaagent:"  + spmjarfile + "=" + appid + "::default"
+      //println jvmOptions
+
+      if(is_windows) {
+        def openEspExe = "\"" + openesp + "\\bin\\OpenESP.exe\""
+        def updateService = "//US//" + service
+        ProcessBuilder pb=new ProcessBuilder("cmd", "/c", openEspExe, updateService, "++JvmOptions", jvmOptions)
+        Process process = pb.start();	
+        } else {		
+          def scriptFile = new File("/etc/init.d/" + service);
+          def scriptFileNew = new File("/etc/init.d/" + service + "New");
+
+          scriptFile.eachLine { line ->
+            if(line.startsWith("export JAVA_OPTS=")) {
+              scriptFileNew << (line +"\n")
+              scriptFileNew << ("-Dcom.sun.management.jmxremote \\\n")
+              scriptFileNew << ("-javaagent:"  + spmjarfile + "=" + appid + "::default \\\n")
+            }
+            else {
+              scriptFileNew << (line +"\n")
+            }
+          }
+
+          // set permissions for script to /etc/init.d
+          def cmdPerm = "chmod 755 /etc/init.d/" + service + "New"
+          println cmdPerm.execute().text	
+
+          def delPrevScript = "rm -f " + "/etc/init.d/" + service
+          println delPrevScript.execute().text
+
+          def renameScript = "mv /etc/init.d/" + service + "New" + " /etc/init.d/" + service
+          println renameScript.execute().text
+
+        }
+
+        println "Done! Now you can restart your OpenESP app server for SPM options to take effect"
+        println "if on Windows, just restart the OpenESP service"
+        println "if on Linux/Mac run: sudo openespctl daemon restart"
+      }  
   
 } 
 
@@ -620,39 +625,39 @@ public class Vifun extends CtlBase {
 
     Vifun ld = new Vifun()
 
-	if(opt) {
-		if(opt.h) {
-		 cli.usage()
-		 return
-		}
-	}
-
-	if(cmd=="start")
-       ld.start()
-    else {
-        println "Invalid command"
+    if(opt) {
+      if(opt.h) {
         cli.usage()
         return
+      }
+    }
+
+    if(cmd=="start")
+    ld.start()
+    else {
+      println "Invalid command"
+      cli.usage()
+      return
     }
   }
-  
+
   public boolean start() {
-        println "Starting Vifun"
-			
-		def vifunBin = openesp + File.separator + "bundle" + File.separator + "vifun" + File.separator + "bin"
-		if(is_windows) {
-			ProcessBuilder pb=new ProcessBuilder(vifunBin+"\\startApp.bat", ".\\", "Vifun");
-			pb.directory(new File(vifunBin))
-			Process process = pb.start();
-		}
-		else {
-			ProcessBuilder pb=new ProcessBuilder(vifunBin+"/vifun");
-			pb.directory(new File(vifunBin))
-			Process process = pb.start();
-		}
-			
- }  
-  
+    println "Starting Vifun"
+
+    def vifunBin = openesp + File.separator + "bundle" + File.separator + "vifun" + File.separator + "bin"
+    if(is_windows) {
+      ProcessBuilder pb=new ProcessBuilder(vifunBin+"\\startApp.bat", ".\\", "Vifun");
+      pb.directory(new File(vifunBin))
+      Process process = pb.start();
+    }
+    else {
+      ProcessBuilder pb=new ProcessBuilder(vifunBin+"/vifun");
+      pb.directory(new File(vifunBin))
+      Process process = pb.start();
+    }
+
+  }  
+
 }  
 
 public class Installrecords extends CtlBase {
