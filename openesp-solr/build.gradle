@@ -67,29 +67,22 @@ task organizeForOpenESP (dependsOn: 'unpackSolr') {
 		}
 		copy {
 			from ("${unzippedPath}/dist") {
-			  include 'solr-langid-*'
-			  include 'solr-velocity-*'
-			  include 'solr-dataimport*'
-			  include 'solr-cell-*'
+			  include '*.jar'
 			}
 			into "${deployDir}/lib/solr"
 		}
 		copy {
-			from "${unzippedPath}/contrib/langid/lib"
+			from ("${unzippedPath}/contrib/") {
+			  include '**/*.jar'
+			}
+			includeEmptyDirs = false
 			into "${deployDir}/lib/solr"
-		}
-		copy {
-			from "${unzippedPath}/contrib/velocity/lib"
-			into "${deployDir}/lib/solr"
-		}
-		copy {
-			from "${unzippedPath}/contrib/dataimporthandler/lib"
-			into "${deployDir}/lib/solr"
-		}
-		copy {
-			from "${unzippedPath}/contrib/extraction/lib"
-			into "${deployDir}/lib/solr"
-		}
+			eachFile {details ->
+        // Top Level Modules
+        def targetPath = flatten(details.path)
+        details.path = targetPath
+      }
+    }
 		copy {
 			from "${unzippedPath}/example/exampledocs/post.jar"
 			into "${deployDir}/bin"
@@ -101,4 +94,10 @@ task organizeForOpenESP (dependsOn: 'unpackSolr') {
 		}
 		new File("${deployDir}/logs/solr").mkdirs()
 	}
+}
+
+def flatten(def path) {
+  // Standard case modules/name/src -> module-name/src
+  def modified=path.replaceAll('.*/(.*)$', '$1')
+  return modified
 }
