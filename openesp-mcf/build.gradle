@@ -1,9 +1,12 @@
 // Build file for MCF as part of OpenESP
 def fullName = "apache-manifoldcf-${mcfVersion}"
 def zipName = "${fullName}-bin.zip"
+def guideName = "end-user-documentation.pdf"
 def binUrl = "http://apache.uib.no/manifoldcf/${zipName}"
+def guideUrl = "http://manifoldcf.apache.org/release/trunk/en_US/${guideName}"
 def buildDir = 'build'
 def zipPath = "${tmpDir}/${zipName}"
+def guidePath = "${tmpDir}/${guideName}"
 def unzippedPath = "${buildDir}/${fullName}"
 def deployDir = "${buildDir}/openesp"
 
@@ -33,6 +36,17 @@ task getMcf (dependsOn: 'init') {
 	}
 }
 
+task getGuide (dependsOn: 'init') {
+	outputs.file guidePath
+	doLast {
+    println "Downloading MCF End User Guide into ${tmpDir}"
+		ant {
+			get src:guideUrl,
+			dest:tmpDir, verbose:"true"
+		}
+	}
+}
+
 task unpackMcf (dependsOn: 'getMcf') {
 //	outputs.file "${unzippedPath}/README.txt"
 	doLast {
@@ -44,8 +58,9 @@ task unpackMcf (dependsOn: 'getMcf') {
 	}
 }
 
-task organizeForOpenESP (dependsOn: 'unpackMcf') {
-//	outputs.file "${deployDir}/webapps/mcf-crawler-ui.war"
+task organizeForOpenESP (dependsOn: ['unpackMcf','getGuide']) {
+	outputs.file "${deployDir}/tomcat/conf/Catalina/localhost/mcf.xml_disabled"
+	outputs.file "${deployDir}/doc/${mcfGuideName}"
   def warPath = "${unzippedPath}/web/war"
 	doLast {
 		copy {
@@ -81,6 +96,11 @@ task organizeForOpenESP (dependsOn: 'unpackMcf') {
 		copy {
 			from "${unzippedPath}/solr-integration/solr-4.x"
 			into "${deployDir}/lib/solr"
+		}
+		copy {
+			from "${guidePath}"
+			into "${deployDir}/doc"
+			rename (guideName, mcfGuideName)
 		}
 		new File("${deployDir}/logs/mcf").mkdirs()
 	}

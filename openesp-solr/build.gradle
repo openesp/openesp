@@ -1,8 +1,11 @@
 // Build file for Solr as part of OpenESP
 def fullName = "solr-${solrVersion}"
+def majorVersion = solrVersion.substring(0,solrVersion.lastIndexOf("."))
+def refGuideName = "apache-solr-ref-guide-${majorVersion}.pdf"
 // TODO: Use the nearest mirror suggested by http://www.apache.org/dyn/closer.cgi
 // Parse out the first match for <strong>(.*?)</strong> from the text
 def binUrl = "http://www.eu.apache.org/dist/lucene/solr/$solrVersion/${fullName}.zip"
+def refGuideUrl = "http://www.eu.apache.org/dist/lucene/solr/ref-guide/${refGuideName}"
 def buildDir = 'build'
 def warName = "${fullName}.war"
 def zipName = "${fullName}.zip"
@@ -37,6 +40,17 @@ task getSolr (dependsOn: 'init') {
 	}
 }
 
+task getSolrRefGuide (dependsOn: 'init') {
+	outputs.file "${tmpDir}/${refGuideName}"
+	doLast {
+		println "Downloading Solr reference guide ${majorVersion} into ${tmpDir}"
+		ant {
+			get src:refGuideUrl,
+			dest:tmpDir, verbose:"false"
+		}
+	}
+}
+
 task unpackSolr (dependsOn: 'getSolr') {
 	outputs.dir "${unzippedPath}"
 	doLast {
@@ -48,8 +62,9 @@ task unpackSolr (dependsOn: 'getSolr') {
 	}
 }
 
-task organizeForOpenESP (dependsOn: 'unpackSolr') {
+task organizeForOpenESP (dependsOn: ['unpackSolr','getSolrRefGuide']) {
 	outputs.file "${deployDir}/tomcat/conf/Catalina/localhost/solr.xml"
+	outputs.file "${deployDir}/doc/${solrGuideName}"
 	doLast {
 		copy {
 			from warPath
@@ -91,6 +106,11 @@ task organizeForOpenESP (dependsOn: 'unpackSolr') {
 		copy {
 			from "${unzippedPath}/example/lib/ext"
 			into "${deployDir}/tomcat/lib/logging"
+		}
+		copy {
+			from "${tmpDir}/${refGuideName}"
+			into "${deployDir}/doc"
+			rename refGuideName, solrGuideName
 		}
 		new File("${deployDir}/logs/solr").mkdirs()
 	}

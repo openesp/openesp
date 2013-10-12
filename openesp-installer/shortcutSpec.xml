@@ -27,6 +27,22 @@
     programGroup="yes"
     startMenu="yes">
   </shortcut>
+  <shortcut
+    name="Solr Reference Guide"
+    target="$INSTALL_PATH\doc\$solrGuideName"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH"
+    programGroup="yes"
+    startMenu="yes">
+  </shortcut>
+  <shortcut
+    name="ManifoldCF End User Documentation"
+    target="$INSTALL_PATH\doc\$mcfGuideName"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH"
+    programGroup="yes"
+    startMenu="yes">
+  </shortcut>
   <shortcut name="OpenESP Admin page" target="$INSTALL_PATH/openesp-admin.url"
             workingDirectory="$INSTALL_PATH" description="OpenESP Admin page"
             programGroup="yes" desktop="yes" applications="no" startMenu="yes">

@@ -3,7 +3,10 @@
 Produktet inkluderer:
 * Apache Solr 4
 * Apache Tomcat 7
-* ManifoldCF 1
+* Apache ManifoldCF
+* Apache ZooKeeper 3
+* SolrMeter
+* ViFun
 * OpenESP adminisjons-app
 
 MERK: Vi anbefaler 64-bits operativsystem og Java

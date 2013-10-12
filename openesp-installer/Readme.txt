@@ -3,7 +3,10 @@ OpenESP (Open Enterprise Search Platform) is a powerful enterprise search server
 The product includes:
 * Apache Solr 4
 * Apache Tomcat 7
-* ManifoldCF 1
+* Apache ManifoldCF
+* Apache ZooKeeper 3
+* SolrMeter
+* ViFun
 * OpenESP administration page
 
 NOTE: We recommend 64 bit OS and Java
