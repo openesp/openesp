@@ -2,9 +2,8 @@
 def fullName = "solr-${solrVersion}"
 def majorVersion = solrVersion.substring(0,solrVersion.lastIndexOf("."))
 def refGuideName = "apache-solr-ref-guide-${majorVersion}.pdf"
-// TODO: Use the nearest mirror suggested by http://www.apache.org/dyn/closer.cgi
-// Parse out the first match for <strong>(.*?)</strong> from the text
-def binUrl = "http://www.eu.apache.org/dist/lucene/solr/$solrVersion/${fullName}.zip"
+def binUrl = new URL("http://www.apache.org/dyn/closer.cgi/lucene/solr/$solrVersion/${fullName}.zip")
+    .getText().find("<strong>(.*?)</strong>") { match, url -> return url }
 def refGuideUrl = "http://www.eu.apache.org/dist/lucene/solr/ref-guide/${refGuideName}"
 def buildDir = 'build'
 def warName = "${fullName}.war"
