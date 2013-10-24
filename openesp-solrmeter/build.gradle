@@ -25,7 +25,7 @@ task init {
 task getSolrmeter (dependsOn: 'init') {
 	outputs.file jarPath
 	doLast {
-    println "Downloading SolrMeter ${solrmeterVersion} into ${tmpDir}"
+    println "Downloading SolrMeter from ${binUrl} into ${tmpDir}"
 		ant {
 			get src:binUrl,
 			dest:tmpDir, verbose:"true"

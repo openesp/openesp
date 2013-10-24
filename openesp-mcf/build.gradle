@@ -2,7 +2,7 @@
 def fullName = "apache-manifoldcf-${mcfVersion}"
 def zipName = "${fullName}-bin.zip"
 def guideName = "end-user-documentation.pdf"
-def binUrl = "http://apache.uib.no/manifoldcf/${zipName}"
+def binUrl = "$apacheMirrorBase/manifoldcf/${zipName}"
 def guideUrl = "http://manifoldcf.apache.org/release/trunk/en_US/${guideName}"
 def buildDir = 'build'
 def zipPath = "${tmpDir}/${zipName}"
@@ -26,9 +26,9 @@ task init {
 }
 
 task getMcf (dependsOn: 'init') {
-	outputs.file zipPath
+	outputs.file file(zipPath)
 	doLast {
-    println "Downloading MCF ${mcfVersion} into ${tmpDir}"
+    println "Downloading MCF from ${binUrl} into ${tmpDir}"
 		ant {
 			get src:binUrl,
 			dest:tmpDir, verbose:"true"
@@ -37,9 +37,9 @@ task getMcf (dependsOn: 'init') {
 }
 
 task getGuide (dependsOn: 'init') {
-	outputs.file guidePath
+	outputs.file file(guidePath)
 	doLast {
-    println "Downloading MCF End User Guide into ${tmpDir}"
+    println "Downloading MCF End User Guide from ${guideUrl} into ${tmpDir}"
 		ant {
 			get src:guideUrl,
 			dest:tmpDir, verbose:"true"

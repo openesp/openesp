@@ -2,7 +2,7 @@
 def fullName = "zookeeper-${zookeeperVersion}"
 def tarName = "${fullName}.tar.gz"
 def jarName = "${fullName}.jar"
-def binUrl = "http://apache.vianett.no/zookeeper/zookeeper-${zookeeperVersion}/${tarName}"
+def binUrl = "$apacheMirrorBase/zookeeper/zookeeper-${zookeeperVersion}/${tarName}"
 def buildDir = 'build'
 def tarPath = "${tmpDir}/${tarName}"
 def unzippedPath = "${buildDir}/${fullName}"
@@ -26,7 +26,7 @@ task init {
 task getZookeeper (dependsOn: 'init') {
 	outputs.file tarPath
 	doLast {
-    println "Downloading ZooKeeper ${zookeeperVersion} into ${tmpDir}"
+    println "Downloading ZooKeeper from ${binUrl} into ${tmpDir}"
 		ant {
 			get src:binUrl,
 			dest:tmpDir, verbose:"true"

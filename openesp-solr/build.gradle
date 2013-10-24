@@ -2,9 +2,8 @@
 def fullName = "solr-${solrVersion}"
 def majorVersion = solrVersion.substring(0,solrVersion.lastIndexOf("."))
 def refGuideName = "apache-solr-ref-guide-${majorVersion}.pdf"
-def binUrl = new URL("http://www.apache.org/dyn/closer.cgi/lucene/solr/$solrVersion/${fullName}.zip")
-    .getText().find("<strong>(.*?)</strong>") { match, url -> return url }
-def refGuideUrl = "http://www.eu.apache.org/dist/lucene/solr/ref-guide/${refGuideName}"
+def binUrl = "$apacheMirrorBase/lucene/solr/$solrVersion/${fullName}.zip"
+def refGuideUrl = "$apacheMirrorBase/lucene/solr/ref-guide/${refGuideName}"
 def buildDir = 'build'
 def warName = "${fullName}.war"
 def zipName = "${fullName}.zip"
@@ -31,7 +30,7 @@ task init {
 task getSolr (dependsOn: 'init') {
 	outputs.file "${zipPath}"
 	doLast {
-    println "Downloading Solr ${solrVersion} into ${tmpDir}"
+    println "Downloading Solr from ${binUrl} into ${tmpDir}"
 		ant {
 			get src:binUrl,
 			dest:tmpDir, verbose:"false"

@@ -6,3 +6,4 @@ build
 *.odt#
 INBOX
 documentation/OpenESP admin guide.pdf
+build-tools

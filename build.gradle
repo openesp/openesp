@@ -8,12 +8,15 @@ project.version = openEspVersion
 apply plugin: 'java'
 project.ext.basename = "openesp"
 
-project.ext.set("tmpDir", "${rootDir}/tmp/")
+project.ext.set("tmpDir", "${rootDir}/tmp")
+def apacheMirrorBase = (new URL("http://www.apache.org/dyn/closer.cgi")
+    .getText().find("<strong>(.*?)</strong>") { match, url -> return url }).minus(~/\/$/)
+project.ext.set("apacheMirrorBase", "${apacheMirrorBase}")
 def deployDir = "build/openesp"
 def openEspZipName = "openesp-${openEspVersion}.zip"
 def tomcatName = "apache-tomcat-${tomcatVersion}"
 def architecture = "-windows-x64"
-def tomcatUrl = "http://apache.uib.no/tomcat/tomcat-${tomcatVersion.split("\\.")[0]}/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
+def tomcatUrl = "$apacheMirrorBase/tomcat/tomcat-${tomcatVersion.split("\\.")[0]}/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
 def tomcatDir = "${deployDir}/tomcat"
 
 println "OpenESP version " + openEspVersion + 
@@ -24,6 +27,7 @@ println "OpenESP version " + openEspVersion +
         ", SolrMeter " + solrmeterVersion +
         ", Vifun " + vifunVersion
 println "TEMP dir: " + tmpDir
+println "Apache mirror for downloads: " + apacheMirrorBase
 
 defaultTasks 'dist' 
 
@@ -60,7 +64,7 @@ task getTomcat (dependsOn: 'init'){
   def tomcatToDir = "${tomcatDir}"
   outputs.file tomcatZipFile
   doLast {
-    println "Downloading Tomcat to ${tmpDir}"
+    println "Downloading Tomcat from ${tomcatUrl} to ${tmpDir}"
     ant {
       get src:tomcatUrl,
       dest:tomcatZipFile, verbose:"false"
@@ -69,7 +73,7 @@ task getTomcat (dependsOn: 'init'){
 }
 
 task deployTomcat (dependsOn: 'getTomcat') {
-  def tomcatZipFile = "${tmpDir}${tomcatName}.zip"
+  def tomcatZipFile = "${tmpDir}/${tomcatName}.zip"
   def tomcatFromDir = "${deployDir}/${tomcatName}"
   def tomcatToDir = "${tomcatDir}"
   doLast {
