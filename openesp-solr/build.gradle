@@ -42,9 +42,13 @@ task getSolrRefGuide (dependsOn: 'init') {
 	outputs.file "${tmpDir}/${refGuideName}"
 	doLast {
 		println "Downloading Solr reference guide ${majorVersion} into ${tmpDir}"
-		ant {
-			get src:refGuideUrl,
-			dest:tmpDir, verbose:"false"
+		try {
+			ant {
+				get src:refGuideUrl,
+				dest:tmpDir, verbose:"false"
+			}
+		} catch (Exception e) {
+			println "Warning: Did not find Solr reference guide - maybe it is not released yet?"
 		}
 	}
 }

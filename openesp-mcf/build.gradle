@@ -92,7 +92,10 @@ task organizeForOpenESP (dependsOn: ['unpackMcf','getGuide']) {
 			exclude 'jetty*'
 			into "${deployDir}/lib/mcf"
 		}
-		copy {from "${unzippedPath}/connectors.xml" into "${deployDir}/conf/mcf"}
+		copy {
+			from "${unzippedPath}/connectors.xml" 
+			into "${deployDir}/conf/mcf"
+		}
 		copy {
 			from "${unzippedPath}/solr-integration/solr-4.x"
 			into "${deployDir}/lib/solr"
