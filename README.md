@@ -17,6 +17,8 @@ We very much welcome bug reports and [pull requests](https://help.github.com/art
 ## Downloads
 Head over to the release section to download the [Latest binary Release](https://github.com/openesp/openesp/releases/latest)
 
+[![Download button](https://raw.githubusercontent.com/openesp/openesp/master/documentation/download-button.png)](https://github.com/openesp/openesp/releases/latest)
+
 ## Developers
 If you want to hack the sources, then clone the repo and build from source.
 
