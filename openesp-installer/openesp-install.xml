@@ -8,7 +8,7 @@
         </authors>
         <url>http://www.openesp.org/</url>
         <uninstaller name="Uninstaller.jar" write="yes"/>
-        <javaversion>1.6.0</javaversion>
+        <javaversion>1.7.0</javaversion>
         <requiresjdk>no</requiresjdk>
         <writeinstallationinformation>yes</writeinstallationinformation>
         <run-privileged condition="izpack.windowsinstall"/>

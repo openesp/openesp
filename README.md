@@ -15,82 +15,30 @@ Product homepage is at [www.openesp.org](http://openesn.net/openesp.html) and th
 We very much welcome bug reports and [pull requests](https://help.github.com/articles/using-pull-requests) from anyone using the product.
 
 ## Downloads
-The project does not currently provide binary distribution. Please build from source.
+Head over to the release section to download the [Latest binary Release](https://github.com/openesp/openesp/releases/latest)
 
-## Building
-To build the product from source, please first download the source distribution
+## Developers
+If you want to hack the sources, then clone the repo and build from source.
 
-* Click the "ZIP" icon to download a source distribution ZIP file snapshot
-* Or clone the Git repo using command ```git clone https://github.com/openesp/openesp.git```
+Please head to the [Development](https://github.com/openesp/openesp/wiki/Development) section for instructions
+on how to build OpenESP from source.
 
-Now you have the source. The project uses [Gradle](http://www.gradle.org/) build system. If you don't have Gradle installed already, simply run the following wrapper command:
-
-Linux/OSX:
-
-    ./gradlew
-    
-Windows:
-
-    gradlew.bat
-
-Alternatively, if you have Gradle already, simply run 
-
-    gradle
-
-By default this will generate the zip distribution file:
-
-* build/distributions/openesp-x.y.zip
-
-If you'd also like to build the installer, then run
-
-    gradle installer
-    
-You will get two more files in the distributions folder:
-
-* build/distributions/openesp-install-x.y.jar (multi platform installer)
-* build/distributions/OpenESP-Setup-x.y.exe (executable windows installer)
-
-### Prerequisites for building the installer
-
-The installer generation depends on IzPack and Launch4J, which must be installed separately. You need:
-
-*   IzPack 4.x installed, and IZPACK_HOME variable set (http://izpack.org/)
-*   Launch4J for your platform and LAUNCH4J_HOME variable set (http://launch4j.sourceforge.net/)
-
-For Windows, use Launch4J 3.0.2, for OSX, use Launch4J 3.1.0
-
-### OSX specific
-If you want to user older version of Launch4J, MinGW tools are too old for Intel processors. Try these commands to install (assuming [MacPorts](http://www.macports.org/)):
-
-    sudo port install launch4j i386-mingw32-binutils i386-mingw32-w32api
-    sudo cp /opt/local/bin/i386-mingw32-windres /opt/local/share/launch4j/bin/windres 
-    sudo cp /opt/local/bin/i386-mingw32-ld /opt/local/share/launch4j/bin/ld
-    export LAUNCH4J_HOME=/opt/local/share/launch4j
+## Installing
+Using the GUI installers, you select all options in the installer windows, and you will end up with
+OpenESP installed as a service which can be started/stopped as any other service.
 
 ## Running
-From build directory:
+If installed as a service, start/stop OpenESP as any other service on your system.
 
-    ./build/openesp/bin/run.sh
-    
-Windows:
-
-    build\openesp\bin\run.cmd
-
-From distribution zip:
+If unpacked from ZIP or built from source:
 
 Linux/OSX:
 
-    jar xf openesp-x.y.zip
     ./openesp/bin/run.sh
 
 Windows:
 
-    jar xf openesp-x.y.zip
     openesp\bin\run.cmd
-
-Now you can visit OpenESP's admin screen at http://localhost:18080/
-
-If you installed using the intaller, you got the option to install a service (Windows) or a daemon (Linux). To start/stop OpenESP, simply start or stop the service/daemon like you normally do on your platform.
 
 ## The openespctl script
 After install, you may want to do certain tasks, and there is a script called openespctl available for certain common tasks. Type ```./bin/openespctl help``` for a usage explanation.
@@ -119,27 +67,6 @@ openesp
   ├── logs       : Log output folders
   ├── tomcat     : Tomcat application server
   └── webapps    : Location of web application (war) files
-```
-
-### Development (source) layout
-Here's the file layout of the source tree
-```
-openesp
-  ├── build.gradle         : build script
-  ├── gradle.properties    : global properties, like component versions
-  ├── initial              : this is the initial folder structure which will be included in distro
-  ├── overlay              : everything in this folder will be overlaid AFTER assembling Solr, Tomcat etc
-  ├── documentation        : for developing user documentation. PDF should be placed in initial/doc
-  ├── openesp-solr         : Sub project for building (or downloading) Apache Solr
-  ├── openesp-mcf          : Sub project for building (or downloading) Apache MCF
-  ├── openesp-installer    : Sub project for building the installer
-  ├── openesp-admin        : Admin webapp
-  ├── openesp-solrmeter    : Bundled SolrMeter app
-  ├── openesp-vifun        : Bundled Vifun app
-  ├── openesp-zookeeper    : Bundled ZooKeeper
-  ├── build.gradle         : The makefile for gradle
-  ├── gradle.properties    : Specify global properties here, such as versions for Solr, Tomcat etc
-  └── build                : After running gradle, the release artifacts are generated here
 ```
 
 ## Roadmap

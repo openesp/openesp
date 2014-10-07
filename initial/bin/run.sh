@@ -28,6 +28,10 @@ export CATALINA_OPTS="-server \
                      -Dsolr.log.dir=$SOLR_LOG_DIR \
                      -Dlog4j.debug=true \
                      -Dlog4j.configuration=file:///$OPENESP_HOME/conf/solr/log4j.properties \
+                     -Dcom.sun.management.jmxremote \
+                     -Dcom.sun.management.jmxremote.port=18086 \
+                     -Dcom.sun.management.jmxremote.ssl=false \
+                     -Dcom.sun.management.jmxremote.authenticate=false \
                      -Dorg.apache.manifoldcf.configfile=$OPENESP_HOME/conf/mcf/properties.xml"
 echo CATALINA_OPTS is $CATALINA_OPTS
 
