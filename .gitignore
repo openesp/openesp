@@ -7,3 +7,5 @@ build
 INBOX
 documentation/OpenESP admin guide.pdf
 build-tools
+.idea
+*.iml
