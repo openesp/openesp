@@ -13,7 +13,6 @@ def apacheMirrorBase = (new URL("http://www.apache.org/dyn/closer.cgi")
     .getText().find("<strong>(.*?)</strong>") { match, url -> return url }).minus(~/\/$/)
 project.ext.set("apacheMirrorBase", "${apacheMirrorBase}")
 def deployDir = "build/openesp"
-def openEspZipName = "openesp-${openEspVersion}.zip"
 def tomcatName = "apache-tomcat-${tomcatVersion}"
 def architecture = "-windows-x64"
 def tomcatUrl = "$apacheMirrorBase/tomcat/tomcat-${tomcatVersion.split("\\.")[0]}/v${tomcatVersion}/bin/${tomcatName}${architecture}.zip"
@@ -60,8 +59,6 @@ task init {
 
 task getTomcat (dependsOn: 'init'){
   def tomcatZipFile = "${tmpDir}/${tomcatName}.zip"
-  def tomcatFromDir = "${deployDir}/${tomcatName}"
-  def tomcatToDir = "${tomcatDir}"
   outputs.file tomcatZipFile
   doLast {
     println "Downloading Tomcat from ${tomcatUrl} to ${tmpDir}"
