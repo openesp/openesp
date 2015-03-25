@@ -9,7 +9,7 @@ def warName = "${fullName}.war"
 def zipName = "${fullName}.zip"
 def zipPath = "${tmpDir}/${zipName}"
 def unzippedPath = "${buildDir}/${fullName}"
-def warPath = "${unzippedPath}/dist/${warName}"
+def warPath = "${unzippedPath}/server/webapps/solr.war"
 def deployDir = "${buildDir}/openesp"
 
 defaultTasks 'organizeForOpenESP' 
@@ -71,7 +71,6 @@ task organizeForOpenESP (dependsOn: ['unpackSolr','getSolrRefGuide']) {
 		copy {
 			from warPath
 			into "${deployDir}/webapps"
-			rename warName, 'solr.war'
 		}
 		copy {
 			from 'solr-tomcat-context.xml'
@@ -79,7 +78,7 @@ task organizeForOpenESP (dependsOn: ['unpackSolr','getSolrRefGuide']) {
 			rename 'solr-tomcat-context.xml', "solr.xml"
 		}
 		copy {
-			from "${unzippedPath}/example/solr"
+			from "${unzippedPath}/server/solr"
 			into "${deployDir}/conf/solr"
 		}
 		copy {
@@ -106,7 +105,7 @@ task organizeForOpenESP (dependsOn: ['unpackSolr','getSolrRefGuide']) {
 		}
 		// Issue #29, upgrade to Solr 4.3 - need slf4j and log4j init
 		copy {
-			from "${unzippedPath}/example/lib/ext"
+			from "${unzippedPath}/server/lib/ext"
 			into "${deployDir}/tomcat/lib/logging"
 		}
 		copy {

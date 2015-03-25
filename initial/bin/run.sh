@@ -14,14 +14,13 @@ SOLR_HOME=$OPENESP_HOME/conf/solr
 SOLR_DATA_DIR=$OPENESP_HOME/data/solr
 SOLR_LOG_DIR=$OPENESP_HOME/logs/solr
 export CATALINA_OPTS="-server \
-                     -verbose:gc \
                      -XX:+UseConcMarkSweepGC \
                      -XX:+CMSClassUnloadingEnabled \
                      -XX:-CMSParallelRemarkEnabled \
                      -XX:+UseCMSCompactAtFullCollection \
                      -XX:+UseParNewGC \
                      -XX:+PrintGCDetails \
-                     -Xms512m -Xmx1024m \
+                     -Xms1024m -Xmx1024m \
                      -Dsolr.solr.home=$SOLR_HOME \
                      -Dopenesp.home=$OPENESP_HOME \
                      -Dsolr.data.dir=$SOLR_DATA_DIR \
