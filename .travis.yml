@@ -1,4 +1,4 @@
 language: java
-install: gradle installer
+#install: gradle installer
 jdk:
   - oraclejdk8
