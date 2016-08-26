@@ -25,6 +25,8 @@ If you want to hack the sources, then clone the repo and build from source.
 Please head to the [Development](https://github.com/openesp/openesp/wiki/Development) section for instructions
 on how to build OpenESP from source.
 
+[![Build Status](https://travis-ci.org/openesp/openesp.svg?branch=master)](https://travis-ci.org/openesp/openesp)
+
 ## Installing
 Using the GUI installers, you select all options in the installer windows, and you will end up with
 OpenESP installed as a service which can be started/stopped as any other service.
