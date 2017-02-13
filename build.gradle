@@ -9,7 +9,7 @@ apply plugin: 'java'
 project.ext.basename = "openesp"
 
 project.ext.set("tmpDir", "${rootDir}/tmp")
-def apacheMirrorBase = (new URL("http://www.apache.org/dyn/closer.cgi")
+def apacheMirrorBase = (new URL("http://www.apache.org/dyn/closer.lua")
     .getText().find("<strong>(.*?)</strong>") { match, url -> return url }).minus(~/\/$/)
 project.ext.set("apacheMirrorBase", "${apacheMirrorBase}")
 def deployDir = "build/openesp"

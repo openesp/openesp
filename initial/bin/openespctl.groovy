@@ -651,7 +651,8 @@ public class Vifun extends CtlBase {
       Process process = pb.start();
     }
     else {
-      ProcessBuilder pb=new ProcessBuilder(vifunBin+"/vifun");
+      File
+      ProcessBuilder pb=new ProcessBuilder(["sh", vifunBin+"/vifun"]);
       pb.directory(new File(vifunBin))
       Process process = pb.start();
     }

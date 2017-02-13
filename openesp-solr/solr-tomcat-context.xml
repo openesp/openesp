@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Context docBase="../../webapps/solr.war" crossContext="true"/>
+<Context docBase="../../webapps/solr"
+  path=""
+  reloadable="true"
+  crossContext="true"
+/>

@@ -5,11 +5,10 @@ def refGuideName = "apache-solr-ref-guide-${majorVersion}.pdf"
 def binUrl = "$apacheMirrorBase/lucene/solr/$solrVersion/${fullName}.zip"
 def refGuideUrl = "$apacheMirrorBase/lucene/solr/ref-guide/${refGuideName}"
 def buildDir = 'build'
-def warName = "${fullName}.war"
 def zipName = "${fullName}.zip"
 def zipPath = "${tmpDir}/${zipName}"
 def unzippedPath = "${buildDir}/${fullName}"
-def warPath = "${unzippedPath}/server/webapps/solr.war"
+def webappPath = "${unzippedPath}/server/solr-webapp/webapp"
 def deployDir = "${buildDir}/openesp"
 
 defaultTasks 'organizeForOpenESP' 
@@ -69,8 +68,8 @@ task organizeForOpenESP (dependsOn: ['unpackSolr','getSolrRefGuide']) {
 	outputs.file "${deployDir}/doc/${solrGuideName}"
 	doLast {
 		copy {
-			from warPath
-			into "${deployDir}/webapps"
+			from webappPath
+			into "${deployDir}/webapps/solr"
 		}
 		copy {
 			from 'solr-tomcat-context.xml'

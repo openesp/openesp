@@ -1,8 +1,8 @@
 ﻿OpenESP (Open Enterprise Search Platform) er en kraftig virksomhets-søk løsning basert på Apache Solr™.
 
 Produktet inkluderer:
-* Apache Solr 4
-* Apache Tomcat 7
+* Apache Solr 6
+* Apache Tomcat 8
 * Apache ManifoldCF
 * Apache ZooKeeper 3
 * SolrMeter
