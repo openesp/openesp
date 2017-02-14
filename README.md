@@ -2,13 +2,14 @@
 
 ## Retirement notice
 >**NOTE: This project is no longer actively maintained.**  
-The OpenESP project was originally started in 2010 to make it easier to deploy Solr
-in a well setup container, with start scripts, installer, security and documentation.
+The OpenESP project was originally started in 2010 to make it easier to deploy 
+Solr in a well configured Tomcat container, with start scripts, installer, 
+security and documentation.
 
 >Solr has since version 5.x been shipped as a standalone app with excellent
 start scripts (`bin/solr`), a central config file (`solr.in.sh`), SSL support,
 authentication support, Linux installer script as well as a well tuned 
-production ready Jetty engine. 
+production ready Jetty engine. Other containers such as Tomcat is not supported. 
 Because of all this, we no longer see the need for OpenESP, and will contribute
 our efforts directly into improving Solr.  
 
