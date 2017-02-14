@@ -1,13 +1,26 @@
 # Open Enterprise Search Platform (OpenESP)
 
-## Deprecation notice
->**NOTE: This project is currently not actively maintained.**  
-Solr has since version 5.x been shipped as a standalone app with excellent
-start scripts (`bin/solr`), a central config file (`solr.in.sh`), SSL support,
-authentication support as well as a ready-tuned production ready Jetty engine. 
-Because of all this, we no longer see the need for OpenESP, and will contribute
-our efforts directly into improving Solr. 
+## Retirement notice
+>**NOTE: This project is no longer actively maintained.**  
+The OpenESP project was originally started in 2010 to make it easier to deploy Solr
+in a well setup container, with start scripts, installer, security and documentation.
 
+>Solr has since version 5.x been shipped as a standalone app with excellent
+start scripts (`bin/solr`), a central config file (`solr.in.sh`), SSL support,
+authentication support, Linux installer script as well as a well tuned 
+production ready Jetty engine. 
+Because of all this, we no longer see the need for OpenESP, and will contribute
+our efforts directly into improving Solr.  
+
+>As there will be no further security patches or bug fixes for Solr 4.x, we 
+recommend existing OpenESP users to upgrade to a recent version of Solr from
+http://lucene.apache.org/solr/
+
+  
+   
+   
+----
+Original README content:
 ## Welcome
 Welcome to OpenESP, the Open Source Enterprise Search Platform.
 The project develops an [Apache 2.0 licensed](http://www.apache.org/licenses/LICENSE-2.0.html) distro of [Apache Solr](http://lucene.apache.org/solr/).
