@@ -17,6 +17,11 @@ our efforts directly into improving Solr.
 recommend existing OpenESP users to upgrade to a recent version of Solr from
 http://lucene.apache.org/solr/
 
+>Windows users may also consider the Chocolatey package at
+https://chocolatey.org/packages/Solr which is installed by simply typing:
+
+>        choco install solr
+
   
    
    
